@@ -14,7 +14,7 @@ def get_param_or_fail(request, name):
     param = request.GET.get(name, False)
 
     if not param:
-        raise Exception('parameter ' + name + ' is not found')
+        raise Exception('Parameter ' + name + ' is not found')
 
     return param
 

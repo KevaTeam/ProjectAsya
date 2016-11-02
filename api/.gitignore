@@ -1,1 +1,6 @@
-migrations/*_initial.py
+migrations/*.py
+migrations/__pycache__/
+
+methods/__pycache__/*
+
+__pycache__/*

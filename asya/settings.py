@@ -65,7 +65,7 @@ ROOT_URLCONF = 'asya.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,6 +130,10 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "frontend/templates/static"),
+    '/var/www/static/',
+]
 
 # Expires time for access token
 TOKEN_EXPIRED_TIME = datetime.timedelta(days=15)

@@ -1,0 +1,56 @@
+<div class="row config" style="margin-left: 20px">
+    <h1>Настройки</h1>
+    <div class="col-md-8 col-xs-8" style="background: #fff">
+        <div class="alert alert-success success-message" style="display: none" role="alert">Изменения успешно сохранены</div>
+        <h3>Основные настройки</h3>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="inputSection">Время раунда (в секундах)</label>
+                    <div class='input-group date' id='round_length'>
+                        <input type='text' class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Настройки модуля "флаги"</h3>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="inputSection">Время жизни флага(в раундах)</label>
+                    <div class='input-group date' id='lifetime'>
+                        <input type='text' class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputScore">Порт</label>
+                    <div class='input-group date' id='flags_port'>
+                        <input type='text' class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Настройки скорборда</h3>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="inputSection">Порт</label>
+                    <div class='input-group date' id='scoreboard_port'>
+                        <input type='text' class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputScore">Время обновления страницы</label>
+                    <div class='input-group date' id='scoreboard_time_refresh'>
+                        <input type='text' class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-success submit-flags">Сохранить</button>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/css/datetimepicker.css">

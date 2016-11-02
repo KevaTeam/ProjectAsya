@@ -27,13 +27,16 @@ def auth(request):
 
     ip = get_client_ip(request)
     print(user)
-    token = Token.generate(user, ip=ip)
+
+    token = Token()
+
+    token.generate(user, ip)
     token.save()
 
     return success_response({
         'access_token': token.token,
         'user_id': user.id,
-        'expires_in': token.expires,
+        'expires_in': int(token.expires.timestamp()),
         'role': user.role
     })
 

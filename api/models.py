@@ -63,7 +63,7 @@ class Token(models.Model):
     ip = models.GenericIPAddressField()
     expires = models.DateTimeField()
 
-    def generate(self, user, ip=None):
+    def generate(self, user, ip):
         self.uid = user
         self.token = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(33))
         self.scope = user.role
@@ -80,3 +80,8 @@ class Attempt(models.Model):
     task_answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
 
     time = models.DateTimeField()
+
+
+class Setting(models.Model):
+    key = models.CharField(max_length=32, blank=False)
+    value = models.CharField(max_length=255, blank=False)
