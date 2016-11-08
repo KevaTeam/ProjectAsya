@@ -2,7 +2,8 @@ from django.conf.urls import include, url
 
 from .methods import (
     auth as auth,
-    timer as timer
+    timer as timer,
+    user as user
 )
 from . import views
 
@@ -14,6 +15,7 @@ urlpatterns = [
 
     url(r'^method/', include([
         url(r'^auth.signup$', auth.signup),
-        url(r'^timer.get', timer.get)
+        url(r'^timer.get', timer.get),
+        url(r'^user.list', user.list)
     ]))
 ]

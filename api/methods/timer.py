@@ -1,10 +1,17 @@
 from django.db.models import Q
 from api.models import Setting
-from api.helpers import success_response
+from api.helpers import success_response, failure_response
 import time
 
 
 def get(request):
+    if not request.user.log_in:
+        return failure_response({
+            'error': {
+                'description': 'You are not logged'
+            }
+        })
+
     timestamps = Setting.objects.filter(
         Q(key='start') | Q(key='end')
     )

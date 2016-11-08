@@ -32,3 +32,11 @@ def success_response(data):
         'success': 1,
         'response': data
     })
+
+
+def not_logged_response():
+    return failure_response({
+        'error': {
+            'description': 'You are not logged'
+        }
+    })

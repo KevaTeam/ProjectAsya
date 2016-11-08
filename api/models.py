@@ -36,6 +36,15 @@ class User(models.Model):
     def __str__(self):
         return self.name
 
+    def to_list(self):
+        return {
+            'id': self.id,
+            'nick': self.name,
+            'rating': self.rating,
+            'passed': 0,
+            'processing': 0
+        }
+
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.now()
