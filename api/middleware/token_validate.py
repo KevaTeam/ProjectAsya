@@ -36,7 +36,7 @@ class TokenValidateMiddleware(object):
         if token:
             request.user.log_in_by_token(token)
 
-
+        # TODO: добавить обработку события окончания игры
         print("TokenMiddleware")
 
         # Code to be executed for each request before

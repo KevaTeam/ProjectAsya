@@ -30,3 +30,9 @@ def list(request):
         'count': len(users),
         'items': array
     })
+
+def get(request):
+    pass
+
+def delete(request):
+    pass
