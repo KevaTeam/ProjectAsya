@@ -1,7 +1,9 @@
 from django.contrib import admin
-
 from api.models import *
-# Register your models here.
 
-admin.site.register(User)
+admin.site.register(Attempt)
+admin.site.register(Section)
 admin.site.register(Setting)
+admin.site.register(Token)
+admin.site.register(Quest)
+admin.site.register(User)
