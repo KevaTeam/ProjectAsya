@@ -22,7 +22,8 @@ urlpatterns = [
         url(r'^user.get', user.get),
         url(r'^user.delete', user.delete),
 
-        url(r'^quest.list', quest.list)
+        url(r'^quest.list', quest.list),
+        url(r'^quest.take', quest.take)
 
     ]))
 ]

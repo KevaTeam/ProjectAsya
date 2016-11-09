@@ -67,6 +67,30 @@ class Quest(models.Model):
     score = models.IntegerField()
     section = models.ForeignKey(Section)
 
+    def __str__(self):
+        return self.name + '(' + self.section.name + ')'
+
+    def to_list(self):
+        return {
+            'id': self.id,
+            'title': self.name,
+            'text': self.text,
+            'section': {
+                'id': self.section.id,
+                'title': self.section.name
+            },
+            'score': self.score
+        }
+
+class UserQuest(models.Model):
+    user = models.ForeignKey(User)
+    quest = models.ForeignKey(Quest)
+    begin = models.DateTimeField('Take time to quest')
+    end = models.DateTimeField('Time delivery quest')
+
+    def __str__(self):
+        return self.user.name + ' - ' + self.quest.name
+
 
 class Token(models.Model):
     uid = models.ForeignKey(User)
@@ -81,6 +105,7 @@ class Token(models.Model):
         self.scope = user.role
         self.expires = datetime.now() + settings.TOKEN_EXPIRED_TIME
         self.ip = ip
+
 
 class Attempt(models.Model):
     user = models.ForeignKey(User)
