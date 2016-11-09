@@ -56,6 +56,9 @@ class User(models.Model):
 class Section(models.Model):
     name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.name
+
 
 class Quest(models.Model):
     name = models.CharField(max_length=100)
