@@ -3,7 +3,7 @@ from api.helpers import success_response, not_logged_response
 
 
 def list(request):
-    if not request.user.log_in:
+    if not request.client.log_in:
         return not_logged_response()
 
     order = request.GET.get('order', False)
@@ -17,7 +17,7 @@ def list(request):
     for user in users:
         u = user.to_list()
 
-        if request.user.is_admin():
+        if request.client.is_admin():
             u.update({
                 'role': user.role,
                 'activated': 1,

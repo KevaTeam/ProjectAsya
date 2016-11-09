@@ -5,7 +5,7 @@ import time
 
 
 def get(request):
-    if not request.user.log_in:
+    if not request.client.log_in:
         return failure_response({
             'error': {
                 'description': 'You are not logged'

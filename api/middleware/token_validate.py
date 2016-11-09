@@ -3,7 +3,7 @@ from api.models import Token
 from datetime import datetime
 
 
-class User():
+class Client():
     log_in = False
     permission = 0
 
@@ -31,10 +31,10 @@ class TokenValidateMiddleware(object):
 
     def __call__(self, request):
         token = request.GET.get('access_token', None)
-        request.user = User()
+        request.client = Client()
 
         if token:
-            request.user.log_in_by_token(token)
+            request.client.log_in_by_token(token)
 
         # TODO: добавить обработку события окончания игры
         print("TokenMiddleware")
