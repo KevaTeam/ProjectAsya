@@ -10,6 +10,7 @@ class Client():
     def log_in_by_token(self, token):
         try:
             user = Token.objects.get(token=token, expires__gte=datetime.now())
+            self.user = user.uid
             self.user_id = user.id
             self.permission = user.scope
             self.log_in = True
@@ -37,7 +38,6 @@ class TokenValidateMiddleware(object):
             request.client.log_in_by_token(token)
 
         # TODO: добавить обработку события окончания игры
-        print("TokenMiddleware")
 
         # Code to be executed for each request before
         # the view (and later middleware) are called.

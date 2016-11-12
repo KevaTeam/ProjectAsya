@@ -82,14 +82,21 @@ class Quest(models.Model):
             'score': self.score
         }
 
+
 class UserQuest(models.Model):
     user = models.ForeignKey(User)
     quest = models.ForeignKey(Quest)
     begin = models.DateTimeField('Take time to quest')
-    end = models.DateTimeField('Time delivery quest')
+    end = models.DateTimeField('Time delivery quest', blank=True, null=True)
 
     def __str__(self):
-        return self.user.name + ' - ' + self.quest.name
+        return 'User: ' + self.user.name + '. Quest: ' + self.quest.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.begin = datetime.now()
+
+        super(UserQuest, self).save(*args, **kwargs)
 
 
 class Token(models.Model):
@@ -114,9 +121,15 @@ class Attempt(models.Model):
 
     # Почему мы записываем ответ задания постоянно?
     # Все просто. Во время игры ответ может измениться, а вердикт должен остаться
-    task_answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
+    quest_answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
 
     time = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.time = datetime.now()
+
+        super(Attempt, self).save(*args, **kwargs)
 
 
 class Setting(models.Model):
