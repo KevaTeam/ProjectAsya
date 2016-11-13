@@ -1,4 +1,4 @@
-from django.db.models import Sum, Count
+from django.db.models import Sum
 from api.models import Quest, UserQuest, Attempt
 from api.helpers import (
     success_response, failure_response,
@@ -9,13 +9,10 @@ from datetime import datetime
 
 
 def list_quest(request):
-    quests = Quest.objects.all()
-    # quests = Quest.objects.annotate(userquest__end__isnull=False)#.extra(select={"passed": "userquest__end IS NOT NULL"})
-    print(quests.query)
-    # return success_response({})
+    quests = Quest.objects.raw('SELECT q.*, (uq."end" > 0) AS "passed" FROM "api_quest" AS q LEFT JOIN "api_userquest" AS uq ON (q.id = uq.quest_id)')
+
     array = []
     for quest in quests:
-        print(quest.userquest_set)
         q = quest.to_list()
 
         if request.client.is_admin():
@@ -25,7 +22,6 @@ def list_quest(request):
 
         #TODO: исправить, когда база будет использоваться на полную
         q.update({
-            'passed': False,
             'count': 0,
             'author': request.client.user.name,
             'full_text': q['text']

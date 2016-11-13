@@ -68,7 +68,10 @@ class Quest(models.Model):
     section = models.ForeignKey(Section)
 
     def __str__(self):
-        return self.name + '(' + self.section.name + ')'
+        return "%s (%s)" % (
+            self.name,
+            self.section.name
+        )
 
     def to_list(self):
         return {
@@ -79,7 +82,8 @@ class Quest(models.Model):
                 'id': self.section.id,
                 'title': self.section.name
             },
-            'score': self.score
+            'score': self.score,
+            'passed': bool(self.passed)
         }
 
 
@@ -90,7 +94,10 @@ class UserQuest(models.Model):
     end = models.DateTimeField('Time delivery quest', blank=True, null=True)
 
     def __str__(self):
-        return 'User: ' + self.user.name + '. Quest: ' + self.quest.name
+        return "User: %s. Quest: %s" % (
+            self.user.name,
+            self.quest.name
+        )
 
     def save(self, *args, **kwargs):
         if not self.pk:
