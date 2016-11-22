@@ -1,11 +1,48 @@
-from django.db.models import Sum
-from api.models import Quest, UserQuest, Attempt
-from api.helpers import (
-    success_response, failure_response,
-    get_param_or_fail
-)
-
 from datetime import datetime
+from django.db.models import Sum
+from django.db import IntegrityError
+from api.models import Quest, QuestCategory, UserQuest, Attempt
+from api.helpers import *
+
+
+def create_quest(request):
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    try:
+        name = get_param_or_fail(request, 'title')
+        category = get_param_or_fail(request, 'section')
+        text = get_param_or_fail(request, 'full_text')
+        answer = get_param_or_fail(request, 'answer')
+        score = get_param_or_fail(request, 'score')
+
+        if not category.isdigit():
+            return failure_response('Parameter section is incorrect')
+
+        if not score.isdigit():
+            return failure_response('Parameter score is incorrect')
+
+        quest_category = QuestCategory.objects.get(id=category)
+
+        quest = Quest(
+            name=name,
+            category=quest_category,
+            text=text,
+            answer=answer,
+            score=score
+        )
+
+        quest.save()
+
+        return success_response(quest.id)
+
+    except QuestCategory.DoesNotExist:
+        return failure_response('Quest category does not exists')
+    except IntegrityError:
+        return failure_response('Quest with the same name is already exists')
+    except Exception as e:
+        print(e)
+        return failure_response(e.args[0])
 
 
 def list_quest(request):
@@ -113,5 +150,4 @@ def pass_answer(request):
         request.client.user.save()
 
     return success_response(decision)
-
 

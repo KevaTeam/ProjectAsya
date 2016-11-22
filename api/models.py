@@ -52,8 +52,7 @@ class User(models.Model):
         super(User, self).save(*args, **kwargs)
 
 
-# Категории квестов
-class Section(models.Model):
+class QuestCategory(models.Model):
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -61,16 +60,16 @@ class Section(models.Model):
 
 
 class Quest(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     text = models.TextField()
     answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
     score = models.IntegerField()
-    section = models.ForeignKey(Section)
+    category = models.ForeignKey(QuestCategory)
 
     def __str__(self):
         return "%s (%s)" % (
             self.name,
-            self.section.name
+            self.category.name
         )
 
     def to_list(self):
@@ -79,8 +78,8 @@ class Quest(models.Model):
             'title': self.name,
             'text': self.text,
             'section': {
-                'id': self.section.id,
-                'title': self.section.name
+                'id': self.category.id,
+                'title': self.category.name
             },
             'score': self.score,
             'passed': bool(self.passed)

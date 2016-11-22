@@ -24,6 +24,7 @@ urlpatterns = [
 
         url(r'^quest.list', quest.list_quest),
         url(r'^quest.take', quest.take_quest),
-        url(r'^quest.pass', quest.pass_answer)
+        url(r'^quest.pass', quest.pass_answer),
+        url(r'^quest.create', quest.create_quest)
     ]))
 ]
