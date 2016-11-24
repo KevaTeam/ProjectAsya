@@ -131,6 +131,21 @@ class Attempt(models.Model):
 
     time = models.DateTimeField()
 
+    def to_list(self):
+        return {
+            'user': {
+                'id': self.user.id,
+                'nick': self.user.name
+            },
+            'quest': {
+                'title': self.quest.name,
+                'section': self.quest.category.name
+            },
+            'user_answer': self.user_answer,
+            'real_answer': self.quest_answer,
+            'time': int(self.time.timestamp())
+        }
+
     def save(self, *args, **kwargs):
         if not self.pk:
             self.time = datetime.now()

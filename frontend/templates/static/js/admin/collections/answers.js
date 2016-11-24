@@ -6,7 +6,7 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     });
 
     var collection = Backbone.Collection.extend({
-        url: 'quest.getAttempts',
+        url: 'quest.attempts',
 
         model: answer,
 

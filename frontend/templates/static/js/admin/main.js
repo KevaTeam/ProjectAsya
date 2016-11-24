@@ -14,7 +14,7 @@ define(['backbone', 'underscore', 'jquery', 'jquery.cookie', 'security'], functi
     App.Events = _.extend({}, Backbone.Events);
     var app = {
         config: {
-            urlAPI: "http://api.keva.su/method/",
+            urlAPI: "http://localhost:8000/api/method/",
             client_id: 'web'
         },
         cache: []

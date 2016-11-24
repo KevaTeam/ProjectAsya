@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.core import serializers
 from django.db.models import Sum
 from django.db import IntegrityError
 from api.models import Quest, QuestCategory, UserQuest, Attempt
@@ -151,3 +152,15 @@ def pass_answer(request):
 
     return success_response(decision)
 
+
+def get_attempts(request):
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    attempts = Attempt.objects.all().order_by('time')
+
+    array = []
+    for attempt in attempts:
+        array.append(attempt.to_list())
+
+    return success_response(array)

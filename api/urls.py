@@ -4,7 +4,8 @@ from .methods import (
     auth as auth,
     timer as timer,
     user as user,
-    quest as quest
+    quest as quest,
+    check as check
 )
 from . import views
 
@@ -16,6 +17,9 @@ urlpatterns = [
 
     url(r'^method/', include([
         url(r'^auth.signup$', auth.signup),
+
+        url(r'^check.permission$', check.permission),
+
         url(r'^timer.get', timer.get),
 
         url(r'^user.list', user.list),
@@ -25,6 +29,7 @@ urlpatterns = [
         url(r'^quest.list', quest.list_quest),
         url(r'^quest.take', quest.take_quest),
         url(r'^quest.pass', quest.pass_answer),
-        url(r'^quest.create', quest.create_quest)
+        url(r'^quest.create', quest.create_quest),
+        url(r'^quest.attempts', quest.get_attempts)
     ]))
 ]

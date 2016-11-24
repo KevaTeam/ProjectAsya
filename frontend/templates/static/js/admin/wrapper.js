@@ -4,7 +4,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
         // Делаем глобальный шаблон
         initialize: function() {
-            var html = new EJS({url: 'templates/admin/main.ejs'}).text;
+            var html = new EJS({url: 'static/templates/admin/main.ejs'}).text;
 
             this.$el.html(html);
         },

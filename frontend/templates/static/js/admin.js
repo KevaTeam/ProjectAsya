@@ -274,7 +274,7 @@ define(function(require) {
 
     App.Views.Config = Backbone.View.extend({
         el: '.container',
-        template: new EJS({url: 'templates/admin/config/main.ejs'}).text,
+        template: new EJS({url: 'static/templates/admin/config/main.ejs'}).text,
         events: {
             "click .submit-datetime": 'changeDate'
         },

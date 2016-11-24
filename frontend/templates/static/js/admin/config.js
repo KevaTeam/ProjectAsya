@@ -32,7 +32,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
 
     return Backbone.View.extend({
         el: '.container',
-        template: new EJS({url: 'templates/admin/config/main.ejs'}).text,
+        template: new EJS({url: 'static/templates/admin/config/main.ejs'}).text,
         events: {
             "click .submit-datetime": 'changeDate',
             "click .submit-flags": 'changeFlags'
