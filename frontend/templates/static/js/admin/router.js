@@ -15,8 +15,7 @@ define(['backbone', 'wrapper'], function(Backbone, wrapper) {
             'service': 'service',
             'users': 'users',
             'teams': 'teams',
-            'users/:id': 'users',
-
+            'users/:id': 'users'
         },
      
         index: function() {

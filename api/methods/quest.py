@@ -10,6 +10,20 @@ def create_quest(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
+    return handle_quest(request, quest=None)
+
+
+def edit_quest(request):
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    id = get_param_or_fail(request, 'id')
+
+    quest = Quest.objects.get(id)
+    return handle_quest(request, quest=quest)
+
+
+def handle_quest(request, quest):
     try:
         name = get_param_or_fail(request, 'title')
         category = get_param_or_fail(request, 'section')
@@ -25,14 +39,16 @@ def create_quest(request):
 
         quest_category = QuestCategory.objects.get(id=category)
 
-        quest = Quest(
-            name=name,
-            category=quest_category,
-            text=text,
-            answer=answer,
-            score=score
-        )
-
+        if not quest:
+            quest = Quest(
+                name=name,
+                category=quest_category,
+                text=text,
+                answer=answer,
+                score=score
+            )
+        # else:
+        #     quest
         quest.save()
 
         return success_response(quest.id)

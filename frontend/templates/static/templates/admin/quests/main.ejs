@@ -50,7 +50,7 @@
             <label for="inputSection">Категория</label>
             <select class="form-control" id="inputSection">
                 <% for(var i=0; i < listSection.length; i++) { %>
-                    <option value="<%- listSection[i].id %>" <% if(listSection[i].id == section.id) { %>selected<% } %>><%- listSection[i].title %></option>
+                    <option value="<%- listSection[i].id %>" <% if(listSection[i].id == section.id) { %>selected<% } %>><%- listSection[i].name %></option>
                 <% } %>
             </select>
         </div>

@@ -58,6 +58,12 @@ class QuestCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def to_list(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
+
 
 class Quest(models.Model):
     name = models.CharField(max_length=100, unique=True)

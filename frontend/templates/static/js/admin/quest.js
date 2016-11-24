@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             type: 'add',
             section: {
                 id: '0',
-                title: ''
+                name: ''
             }
         },
 
@@ -41,7 +41,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
     });
 
     App.Collections.ListSection = Backbone.Collection.extend({
-        url: 'quest.listSection',
+        url: 'category.list',
 
         model: App.Models.QuestSection,
 
@@ -106,7 +106,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         initialize: function() {
             wrapper.updateMenu('quest');
 
-            var html = new EJS({url: 'templates/admin/quests/main.ejs'}).text;
+            var html = new EJS({url: 'static/templates/admin/quests/main.ejs'}).text;
 
             wrapper.renderPage(html);
 
