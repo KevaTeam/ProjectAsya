@@ -18,8 +18,11 @@ def edit_quest(request):
         return failure_response("You don't have sufficient permissions")
 
     id = get_param_or_fail(request, 'id')
+    try:
+        quest = Quest.objects.get(id=id)
+    except Quest.DoesNotExist:
+        return handle_quest(request, quest=None)
 
-    quest = Quest.objects.get(id)
     return handle_quest(request, quest=quest)
 
 
@@ -47,8 +50,13 @@ def handle_quest(request, quest):
                 answer=answer,
                 score=score
             )
-        # else:
-        #     quest
+        else:
+            quest.name = name
+            quest.category = quest_category
+            quest.text = text
+            quest.answer = answer
+            quest.score = score
+
         quest.save()
 
         return success_response(quest.id)

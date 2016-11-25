@@ -33,6 +33,7 @@ urlpatterns = [
         url(r'^quest.take$', quest.take_quest),
         url(r'^quest.pass$', quest.pass_answer),
         url(r'^quest.create$', quest.create_quest),
+        url(r'^quest.save', quest.edit_quest),
         url(r'^quest.attempts$', quest.get_attempts),
     ]))
 ]
