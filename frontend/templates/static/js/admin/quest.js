@@ -212,7 +212,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
                         var c = self.collections.Quests.get(questId);
                         self.collections.Quests.remove(c);
                         console.log(self.collections.Quests);
-                        self.updateCount(self.collections.Quests).apply(self);
+                        self.updateCount(self.collections.Quests);
                         self.$el.find('#quest-'+questId).remove();
                         modalWindow.modal('hide');
                     }

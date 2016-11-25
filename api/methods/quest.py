@@ -1,5 +1,4 @@
 from datetime import datetime
-from django.core import serializers
 from django.db.models import Sum
 from django.db import IntegrityError
 from api.models import Quest, QuestCategory, UserQuest, Attempt
@@ -68,6 +67,21 @@ def handle_quest(request, quest):
     except Exception as e:
         print(e)
         return failure_response(e.args[0])
+
+
+def delete_quest(request):
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    id = get_param_or_fail(request, 'id')
+
+    try:
+        quest = Quest.objects.get(id=id)
+        quest.delete()
+
+        return success_response('1')
+    except Quest.DoesNotExist:
+        return failure_response('Quest is not found')
 
 
 def list_quest(request):
