@@ -4,7 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         defaults: {
             "id": 0,
             "type": "add",
-            "nick": "",
+            "username": "",
             "role": "1",
             "mail": ""
         },
@@ -102,7 +102,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         initialize: function() {
             wrapper.updateMenu('users');
 
-            var html = new EJS({url: 'templates/admin/users/main.ejs'}).text;
+            var html = new EJS({url: 'static/templates/admin/users/main.ejs'}).text;
 
             wrapper.renderPage(html);
 
@@ -228,7 +228,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         addUserQuery: function() {
             var params = {
                     password: this.$el.find('#inputPassword').val(),
-                    nick: this.$el.find('#inputNick').val(),
+                    username: this.$el.find('#inputNick').val(),
                     mail: this.$el.find('#inputMail').val(),
                     role: this.$el.find('#inputRole').val(),
                     id: this.$el.find('#inputId').val()

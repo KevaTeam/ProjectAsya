@@ -1,5 +1,5 @@
 from api.models import User
-from api.helpers import success_response, not_logged_response
+from api.helpers import *
 
 
 def list(request):
@@ -35,4 +35,15 @@ def get(request):
     pass
 
 def delete(request):
-    pass
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    id = get_param_or_fail(request, 'id')
+
+    try:
+        user = User.objects.get(id=id)
+        user.delete()
+
+        return success_response('1')
+    except User.DoesNotExist:
+        return failure_response('User is not found')
