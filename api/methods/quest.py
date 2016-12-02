@@ -99,7 +99,7 @@ def list_quest(request):
         #TODO: исправить, когда база будет использоваться на полную
         q.update({
             'count': 0,
-            'author': request.client.user.name,
+            'author': 'noname',
             'full_text': q['text']
         })
 

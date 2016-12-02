@@ -7,7 +7,7 @@ $(function() {
 
     var App = {
         config: {
-            urlAPI: "http://localhost:8000/api/method/",
+            urlAPI: "/api/method/",
             client_id: 'web'
         },
         cache: {
