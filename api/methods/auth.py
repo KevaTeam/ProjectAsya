@@ -18,12 +18,12 @@ def auth(request):
         user = User.objects.get(name=username)
 
     except User.DoesNotExist:
-        return failure_response('The user with same username does not exists')
+        return failure_response('The user with same username or password does not exists')
     except Exception as e:
         return failure_response(e.args[0])
 
     if not check_password(password, user.password):
-        return failure_response('The user with same username does not exists')
+        return failure_response('The user with same username or password does not exists')
 
     ip = get_client_ip(request)
     print(user)
