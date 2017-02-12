@@ -21,7 +21,12 @@ urlpatterns = [
 
         url(r'^check.permission$', check.permission),
 
-        url(r'^category.list$', category.list),
+        url(r'^category.', include([
+            url(r'^add$', category.add),
+            url(r'^list$', category.list),
+            url(r'^edit$', category.edit),
+            url(r'^delete$', category.delete)
+        ])),
 
         url(r'^timer.get$', timer.get),
 

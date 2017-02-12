@@ -4,7 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
     Category = Backbone.Model.extend({
         defaults: {
             id: 0,
-            title: '',
+            name: '',
             type: 'add'
         },
 
@@ -14,8 +14,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         }
     });
 
-    collectionCategory = Backbone.Collection.extend({
-        url: 'quest.listSection',
+    Categories = Backbone.Collection.extend({
+        url: 'category.list',
 
         model: Category,
 
@@ -79,7 +79,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         initialize: function() {
             wrapper.updateMenu('category');
 
-            var html = new EJS({url: 'templates/admin/category/main.ejs'}).text;
+            var html = new EJS({url: 'static/templates/admin/category/main.ejs'}).text;
 
             wrapper.renderPage(html);
 
@@ -87,11 +87,12 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
                 quests: this.$el.find('#quest-list'),
                 form: this.$el.find('#quest-form')
             };
+
             // Список категорий квеста
             this.sections = [];
 
             this.collections = {};
-            this.collections.Categories = new collectionCategory();
+            this.collections.Categories = new Categories();
 
             this.collections.Categories.fetch();
 
@@ -130,13 +131,13 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         formParse: function() {
             var params = {
                     id: this.$el.find('#inputId').val(),
-                    title: this.$el.find('#inputTitle').val()
+                    name: this.$el.find('#inputName').val()
                 },
                 self = this,
                 type = this.$el.find('#inputType').val();
 
             var model = Backbone.Model.extend({
-                url: (type == 'add' ? 'quest.addSection':'quest.editSection'),
+                url: (type == 'add' ? 'category.add':'category.edit'),
 
                 parse: function(response){
                     self.$el.find('#quest-form').html('');
@@ -167,8 +168,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
 
             this.listenTo(modal, 'submit', function() {
                 var model = Backbone.Model.extend({
-                    url: 'quest.deleteSection',
-                    parse: function(response){
+                    url: 'category.delete',
+                    parse: function() {
                         var c = self.collections.Categories.get(questId);
                         self.collections.Categories.remove(c);
 
@@ -178,6 +179,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
                 });
 
                 model = new model();
+
                 model.fetch({ params: { id: questId } });
                 self.listenTo(model, 'error', function(response) {
                     alert('Error! ' + response.message);
@@ -198,7 +200,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         updateCount: function (items) {
             var count_user = rulesRus(items.length, ['категория', 'категории', 'категорий']);
             this.$el.find('.count_quest').text(count_user);
-        },
+        }
     });
 
 });
