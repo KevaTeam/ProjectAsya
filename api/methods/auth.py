@@ -59,10 +59,16 @@ def signup(request):
         if user:
             return failure_response('The user with same email is already exists')
 
+        # Проверяем существуют ли другие пользователи,
+        # Если нет, то даем ему админские права
+        count_user = User.objects.all().count()
+        user_role = 2 if count_user == 0 else 1
+
         user = User(
             name=username,
             mail=mail,
             password=password,
+            role=user_role
         )
 
         user.save()
@@ -72,10 +78,8 @@ def signup(request):
     except User.DoesNotExist:
         return failure_response('The user with same username does not exists')
     except IntegrityError as e:
-        print(e)
         return failure_response(e.args[0])
     except Exception as e:
-        print(e)
         return failure_response(e.args[0])
 
-    return success_response({'id': 1})
+    return success_response({'id': user.id})
