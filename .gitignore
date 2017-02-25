@@ -1,5 +1,7 @@
 .idea/
 db.sqlite3
+frontend/templates/static/node_modules/*
+
 __pycache__/
 
 *.pyc
