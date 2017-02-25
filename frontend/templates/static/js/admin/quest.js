@@ -6,6 +6,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             id: 0,
             title: '',
             score: '',
+            tags: '',
             short_text: '',
             full_text: '',
             answer: '',
