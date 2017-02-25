@@ -31,7 +31,7 @@ class TokenValidateMiddleware(object):
         # One-time configuration and initialization.
 
     def __call__(self, request):
-        token = request.GET.get('access_token', None)
+        token = request.GET.get('access_token', None) or request.POST.get('access_token', None)
         request.client = Client()
 
         if token:
