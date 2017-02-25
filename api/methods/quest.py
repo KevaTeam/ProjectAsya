@@ -33,7 +33,7 @@ def handle_quest(request, quest):
         answer = get_param_or_fail(request, 'answer')
         score = get_param_or_fail(request, 'score')
 
-        tags = get_param_or_fail(request, 'tags')
+        tags = get_param_or_fail(request, 'tags', False)
 
         if not category.isdigit():
             return failure_response('Parameter section is incorrect')
@@ -43,22 +43,19 @@ def handle_quest(request, quest):
 
         quest_category = QuestCategory.objects.get(id=category)
 
+        params = {
+            'name': name,
+            'category': quest_category,
+            'text': text,
+            'answer': answer,
+            'score': score,
+            'tags': tags
+        }
+
         if not quest:
-            quest = Quest(
-                name=name,
-                category=quest_category,
-                text=text,
-                answer=answer,
-                score=score,
-                tags=tags
-            )
+            quest = Quest(**params)
         else:
-            quest.name = name
-            quest.category = quest_category
-            quest.text = text
-            quest.answer = answer
-            quest.score = score
-            quest.tags = tags
+            quest.update(params)
 
         quest.save()
 

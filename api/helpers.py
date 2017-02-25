@@ -10,13 +10,13 @@ def get_client_ip(request):
     return ip
 
 
-def get_param_or_fail(request, name):
+def get_param_or_fail(request, name, is_required=True):
     param = request.GET.get(name, False)
 
     if not param:
         param = request.POST.get(name, False)
 
-    if not param:
+    if not param and is_required:
         raise Exception('Parameter ' + name + ' is not found')
 
     return param
