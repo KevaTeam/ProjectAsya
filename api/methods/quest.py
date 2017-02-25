@@ -55,7 +55,12 @@ def handle_quest(request, quest):
         if not quest:
             quest = Quest(**params)
         else:
-            quest.update(params)
+            quest.name = name
+            quest.category = quest_category
+            quest.text = text
+            quest.answer = answer
+            quest.score = score
+            quest.tags = tags
 
         quest.save()
 
