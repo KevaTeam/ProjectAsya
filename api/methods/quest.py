@@ -33,6 +33,8 @@ def handle_quest(request, quest):
         answer = get_param_or_fail(request, 'answer')
         score = get_param_or_fail(request, 'score')
 
+        tags = get_param_or_fail(request, 'tags')
+
         if not category.isdigit():
             return failure_response('Parameter section is incorrect')
 
@@ -47,7 +49,8 @@ def handle_quest(request, quest):
                 category=quest_category,
                 text=text,
                 answer=answer,
-                score=score
+                score=score,
+                tags=tags
             )
         else:
             quest.name = name
@@ -55,6 +58,7 @@ def handle_quest(request, quest):
             quest.text = text
             quest.answer = answer
             quest.score = score
+            quest.tags = tags
 
         quest.save()
 
@@ -85,8 +89,8 @@ def delete_quest(request):
 
 
 def list_quest(request):
-    quests = Quest.objects.raw('SELECT q.*, (uq."end" > 0) AS "passed" FROM "api_quest" AS q LEFT JOIN "api_userquest" AS uq ON (q.id = uq.quest_id)')
-
+    quests = Quest.objects.raw('SELECT q.*, COUNT(uq.`end`) AS `passed` FROM api_quest AS q LEFT JOIN api_userquest AS uq ON (q.id = uq.quest_id) GROUP BY q.id')
+    print(quests)
     array = []
     for quest in quests:
         q = quest.to_list()

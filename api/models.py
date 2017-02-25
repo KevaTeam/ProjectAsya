@@ -71,6 +71,7 @@ class Quest(models.Model):
     answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
     score = models.IntegerField()
     category = models.ForeignKey(QuestCategory)
+    tags = models.TextField(blank=True)
 
     def __str__(self):
         return "%s (%s)" % (
@@ -87,6 +88,7 @@ class Quest(models.Model):
                 'id': self.category.id,
                 'title': self.category.name
             },
+            'tags': self.tags.split(','),
             'score': self.score,
             'passed': bool(self.passed)
         }
@@ -113,7 +115,7 @@ class UserQuest(models.Model):
 
 class Token(models.Model):
     uid = models.ForeignKey(User)
-    token = models.CharField(max_length=32)
+    token = models.CharField(max_length=33)
     scope = models.IntegerField(default=1)
     ip = models.GenericIPAddressField()
     expires = models.DateTimeField()

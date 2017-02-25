@@ -11,7 +11,9 @@ requirejs.config({
         ejs: 'ejs',
         moment: '../vendors/moment',
         datetimepicker: '../vendors/datetimepicker',
-
+        selectize: '../../node_modules/selectize/dist/js/selectize',
+        sifter: '../../node_modules/sifter/sifter',
+        microplugin: '../../node_modules/microplugin/src/microplugin',
 
         helpers: 'admin/helpers/helpers'
     }

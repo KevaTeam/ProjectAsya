@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($, _, Backbone, wrapper) {
+define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap'], function($, _, Backbone, wrapper) {
 
-        // Quests
+    // Quests
     App.Models.Quest = Backbone.Model.extend({
         defaults: {
             id: 0,
@@ -20,6 +20,10 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
 
         parse: function(response) {
             response.type = 'edit';
+            console.log(response.tags);
+            response.tags = response.tags.join(',');
+            console.log(response.tags);
+
             return response;
         }
     });
@@ -55,17 +59,72 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             'click .btn-success': 'submit'
         },
 
-        initialize: function() {
+        initialize: function () {
             this.template = _.template($('#quest-form-template').html());
         },
 
+        remove: function () {
+            this.$el.remove();
+        },
+
+        setTags: function () {
+            var $selectize = this.$el.find('#inputTags').selectize({
+                plugins: ['remove_button'],
+                delimiter: ',',
+                persist: false,
+                create: function(input) {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                }
+            });
+        },
+
         submit: function() {
-            App.Events.trigger('quests:form:parse');
+            var params = {
+                    id: this.$el.find('#inputId').val(),
+                    title: this.$el.find('#inputName').val(),
+                    section: this.$el.find('#inputSection').val(),
+                    score: this.$el.find('#inputScore').val(),
+                    answer: this.$el.find('#inputAnswer').val(),
+                    author: this.$el.find('#inputAuthor').val(),
+                    short_text: this.$el.find('#inputShortDescription').val(),
+                    full_text: this.$el.find('#inputDescription').val(),
+
+                    tags: this.$el.find('#inputTags').val(),
+
+                    solution: this.$el.find('#inputSolution').val()
+                },
+                type = this.$el.find('#inputType').val(),
+                url = 'quest.' + (type == 'add' ? 'create':'save'),
+                self = this;
+
+            var model = Backbone.Model.extend({
+                url: url,
+
+                parse: function() {
+                    self.remove();
+                    App.Events.trigger('quests:list:update');
+                }
+            });
+            var formModel = new model();
+
+            formModel.fetch({
+                method: 'POST',
+                params: params
+            });
+
+            this.listenTo(formModel, 'error', function(response) {
+                App.Events.trigger('quests:form:message:show', response.message);
+            });
         },
 
         render: function() {
-            console.log(this.model.toJSON());
             this.$el.html(this.template(this.model.toJSON()));
+
+            this.setTags();
+
             return this;
         }
     });
@@ -114,6 +173,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
                 quests: this.$el.find('#quest-list'),
                 form: this.$el.find('#quest-form')
             };
+
             // Список категорий квеста
             this.sections = [];
 
@@ -123,8 +183,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
 
 
             this.collections.Quests.fetch();
-
             this.collections.Sections.fetch();
+
             this.listenTo(this.collections.Quests, 'sync', this.updateCount);
             this.listenTo(this.collections.Quests, 'add', this.addOneQuest);
             this.listenTo(this.collections.Quests, 'change', this.updateOneQuest);
@@ -133,18 +193,18 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
 
             App.Events.on('quests:block:edit:show', this.showForm, this);
             App.Events.on('quests:modal:confirm:show', this.showDeleteWindow, this);
-            App.Events.on('quests:form:parse', this.formParse, this);
+            App.Events.on('quests:list:update', this.updateList, this);
             App.Events.on('quests:form:message:show', this.showFormMessage, this);
         },
 
         showForm: function(id) {
-            console.log(id);
             if(typeof(id) == 'object') {
                 var model = new App.Models.Quest();
             }
             else {
                 var model = this.collections.Quests.get(id);
             }
+
             // Добавляем список категорий
             model.attributes.listSection = this.sections;
 
@@ -153,43 +213,14 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             this.blocks.form.html(view.render().el);
         },
 
+        updateList: function () {
+            this.collections.Quests.fetch();
+        },
+
         updateOneQuest: function(user) {
             var view = new App.Views.QuestList({ id: 'quest-'+user.get('id'), model: user});
 
             this.$el.find('#quest-'+user.get('id')).replaceWith(view.render().el);
-        },
-
-        formParse: function() {
-            var params = {
-                    id: this.$el.find('#inputId').val(),
-                    title: this.$el.find('#inputName').val(),
-                    section: this.$el.find('#inputSection').val(),
-                    score: this.$el.find('#inputScore').val(),
-                    answer: this.$el.find('#inputAnswer').val(),
-                    author: this.$el.find('#inputAuthor').val(),
-                    short_text: this.$el.find('#inputShortDescription').val(),
-                    full_text: this.$el.find('#inputDescription').val(),
-
-                    solution: this.$el.find('#inputSolution').val()
-                },
-                self = this,
-                type = this.$el.find('#inputType').val();
-
-            var model = Backbone.Model.extend({
-                url: (type == 'add' ? 'quest.create':'quest.save'),
-
-                parse: function(response){
-                    self.$el.find('#quest-form').html('');
-                    self.collections.Quests.fetch();
-                }
-            });
-
-            model = new model();
-            model.fetch({ params: params });
-
-            this.listenTo(model, 'error', function(response) {
-                App.Events.trigger('quests:form:message:show', response.message);
-            });
         },
 
         addOneSection: function(model) {
@@ -204,14 +235,13 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
 
             var modalWindow = this.$el.find('.modalWindow').html(modal.render().el).find('.modal');
             modalWindow.modal('show');
-            console.log(self.collections.Quests);
+
             this.listenTo(modal, 'submit', function() {
                 var model = Backbone.Model.extend({
                     url: 'quest.delete',
                     parse: function(response){
                         var c = self.collections.Quests.get(questId);
                         self.collections.Quests.remove(c);
-                        console.log(self.collections.Quests);
                         self.updateCount(self.collections.Quests);
                         self.$el.find('#quest-'+questId).remove();
                         modalWindow.modal('hide');
@@ -239,7 +269,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         updateCount: function (items) {
             var count_user = rulesRus(items.length, ['квест', 'квеста', 'квестов']);
             this.$el.find('.count_quest').text(count_user);
-        },
+        }
     });
 
 });
