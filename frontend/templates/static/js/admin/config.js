@@ -1,14 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker'], function($, underscore, Backbone, wrapper, moment) {
 
-    currentTime = Backbone.Model.extend({
-        url: 'timer.current',
+    var currentTime = Backbone.Model.extend({ url: 'timer.current' });
 
-        parse: function(data) {
-            return data;
-        }
-    });
-
-    dataSetting = Backbone.Model.extend({
+    var dataSetting = Backbone.Model.extend({
         initialize: function(method) {
             this.setMethod(method);
         },

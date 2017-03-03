@@ -2,54 +2,41 @@
     <h1>Настройки</h1>
     <div class="col-md-8 col-xs-8" style="background: #fff">
         <div class="alert alert-success success-message" style="display: none" role="alert">Изменения успешно сохранены</div>
-        <h3>Основные настройки</h3>
+        <h3>Время</h3>
+
         <div class="form-group">
             <div class="row">
+                <div class="col-md-12"><p>Сейчас: 27 сентабря 2017</p></div>
                 <div class="col-md-6">
-                    <label for="inputSection">Время раунда (в секундах)</label>
+                    <label for="inputSection">Время начала соревнования</label>
+                    <div class='input-group date' id='round_length'>
+                        <input type='text' class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputSection">Время окончания соревнования</label>
                     <div class='input-group date' id='round_length'>
                         <input type='text' class="form-control" />
                     </div>
                 </div>
             </div>
         </div>
-
-        <h3>Настройки модуля "флаги"</h3>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="inputSection">Время жизни флага(в раундах)</label>
-                    <div class='input-group date' id='lifetime'>
-                        <input type='text' class="form-control" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="inputScore">Порт</label>
-                    <div class='input-group date' id='flags_port'>
-                        <input type='text' class="form-control" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h3>Настройки скорборда</h3>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="inputSection">Порт</label>
-                    <div class='input-group date' id='scoreboard_port'>
-                        <input type='text' class="form-control" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="inputScore">Время обновления страницы</label>
-                    <div class='input-group date' id='scoreboard_time_refresh'>
-                        <input type='text' class="form-control" />
-                    </div>
-                </div>
-            </div>
-        </div>
         <button type="button" class="btn btn-success submit-flags">Сохранить</button>
+
+        <h3>Работа с резервными копиями</h3>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">
+                <h4>Сохранить</h4>
+                    <button type="button" class="btn btn-primary submit-flags">Скачать backup</button>
+                </div>
+                <div class="col-md-12">
+                    <h4>Загрузить</h4>
+                    <input type="file" id="backup_file" />
+                    <button type="button" class="btn btn-primary submit-flags">Загрузить backup</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
