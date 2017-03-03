@@ -1,6 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($, _, Backbone, wrapper) {
 
-        // Quests
     Category = Backbone.Model.extend({
         defaults: {
             id: 0,
@@ -173,7 +172,9 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
                         var c = self.collections.Categories.get(questId);
                         self.collections.Categories.remove(c);
 
+                        self.updateCount(self.collections.Categories);
                         self.$el.find('#quest-'+questId).remove();
+
                         modalWindow.modal('hide');
                     }
                 });
