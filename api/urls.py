@@ -28,7 +28,10 @@ urlpatterns = [
             url(r'^delete$', category.delete)
         ])),
 
-        url(r'^timer.get$', timer.get),
+        url(r'^timer.', include([
+            url(r'^get$', timer.get),
+            url(r'^current$', timer.current),
+        ])),
 
         url(r'^user.', include([
             url(r'^list$', user.list),

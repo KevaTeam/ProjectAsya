@@ -25,3 +25,8 @@ def get(request):
 
 
     return success_response(data)
+
+def current(request):
+    return success_response({
+        'timestamp': int(time.time())
+    })
