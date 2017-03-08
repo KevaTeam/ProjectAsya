@@ -90,7 +90,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
         },
 
         destructTimer: function() {
-            clearInterval(this.timer);
+            clearInterval(this.currentTime.timer);
+            clearInterval(this.updateTimeTimer);
         },
 
         initialize: function() {
@@ -106,16 +107,14 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             this.listenTo(this.data, 'sync', this.setData);
 
             // Обновляем время с сервера для точности
-            setInterval(function () {
+            this.updateTimeTimer = setInterval(function () {
                 this.currentTime.fetch();
-            }.bind(this), 1000);
+            }.bind(this), 10000);
             this.currentTime.fetch();
 
             this.data.fetch({ params: { key: 'datetime_start' }});
 
-            App.Events.on('page:update', function() {
-                self.destructTimer();
-            });
+            App.Events.on('page:update', this.destructTimer, this);
 
             moment.locale('ru');
         }
