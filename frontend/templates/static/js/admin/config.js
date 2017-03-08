@@ -1,6 +1,23 @@
 define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker'], function($, underscore, Backbone, wrapper, moment) {
 
-    var currentTime = Backbone.Model.extend({ url: 'timer.current' });
+    var currentTime = Backbone.Model.extend({
+        url: 'timer.current',
+        timer: null,
+        parse: function (response) {
+            var time = response.timestamp,
+                $el = $('.current-time');
+
+            clearTimeout(this.timer);
+
+            this.timer = setInterval(function() {
+                $el.text(moment.unix(time).format('D MMMM YYYY, HH:mm:ss'));
+
+                time += 1;
+            }, 1000);
+
+            $el.text(moment(time * 1000).format('D MMMM YYYY, HH:mm:ss'));
+        }
+    });
 
     var dataSetting = Backbone.Model.extend({
         initialize: function(method) {
@@ -72,20 +89,6 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             //});
         },
 
-        setCurrentTime: function(data) {
-            var self = this;
-            this.timer = setInterval(function() {
-                var date = moment.unix(data.get('time')).format('DD MMMM YYYY, HH:mm:ss');
-                self.$el.find('.current-time').text(date);
-
-                data.set({ 'time': data.get('time') + 1 });
-            }, 1000);
-
-            var date = moment(data.get('time')*1000).format('DD MMMM YYYY, HH:mm:ss');
-            
-            this.$el.find('.current-time').text(date);
-        },
-
         destructTimer: function() {
             clearInterval(this.timer);
         },
@@ -100,10 +103,14 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             this.currentTime = new currentTime();
             this.data = new dataSetting('get');
 
-            this.listenTo(this.currentTime, 'sync', this.setCurrentTime);
             this.listenTo(this.data, 'sync', this.setData);
 
+            // Обновляем время с сервера для точности
+            setInterval(function () {
+                this.currentTime.fetch();
+            }.bind(this), 1000);
             this.currentTime.fetch();
+
             this.data.fetch({ params: { key: 'datetime_start' }});
 
             App.Events.on('page:update', function() {
