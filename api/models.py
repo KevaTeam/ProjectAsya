@@ -160,6 +160,17 @@ class Attempt(models.Model):
 
         super(Attempt, self).save(*args, **kwargs)
 
+class Message(models.Model):
+    MESSAGE_TYPE = (
+        (1, 'Для пользователя'),
+        (2, 'Для всех')
+    )
+    type = models.IntegerField(default=1, choices=MESSAGE_TYPE)
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    time = models.DateTimeField('Дата создания новости')
+
+
 
 class Setting(models.Model):
     key = models.CharField(max_length=32, blank=False)
