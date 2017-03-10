@@ -3,6 +3,9 @@ from api.models import QuestCategory
 from api.helpers import *
 
 def list(request):
+    if not request.client.log_in:
+        return not_logged_response()
+
     categories = QuestCategory.objects.values()
 
     return success_response({
