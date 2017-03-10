@@ -1,13 +1,14 @@
 from django.conf.urls import include, url
-
 from .methods import (
     auth as auth,
+    category as category,
+    check as check,
+    message as message,
     timer as timer,
     user as user,
-    quest as quest,
-    check as check,
-    category as category
+    quest as quest
 )
+
 from . import views
 
 # from methods import
@@ -26,6 +27,13 @@ urlpatterns = [
             url(r'^list$', category.list),
             url(r'^edit$', category.edit),
             url(r'^delete$', category.delete)
+        ])),
+
+        url(r'^message.', include([
+            url(r'^add$', message.add),
+            url(r'^list$', message.list),
+            url(r'^edit$', message.edit),
+            url(r'^delete$', message.delete)
         ])),
 
         url(r'^timer.', include([
