@@ -13,6 +13,7 @@ def list(request):
         'items': [entry for entry in messages]
     })
 
+
 def add(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
@@ -39,12 +40,17 @@ def edit(request):
         return failure_response("You don't have sufficient permissions")
 
     id = get_param_or_fail(request, 'id')
-    name = get_param_or_fail(request, 'name')
+    title = get_param_or_fail(request, 'title')
+    text = get_param_or_fail(request, 'text')
+    type = get_param_or_fail(request, 'type')
 
     try:
         category = Message.objects.get(id=id)
 
-        category.name = name
+        category.title = title
+        category.text = text
+        category.type = type
+
         category.save()
     except Message.DoesNotExist:
         return failure_response("Category with this id is not exists")
