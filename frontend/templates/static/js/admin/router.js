@@ -13,6 +13,7 @@ define(['backbone', 'wrapper'], function(Backbone, wrapper) {
             'index': 'index',
             'quest': 'quest',
             'service': 'service',
+            'messages': 'message',
             'users': 'users',
             'teams': 'teams',
             'users/:id': 'users'
@@ -46,6 +47,12 @@ define(['backbone', 'wrapper'], function(Backbone, wrapper) {
         config: function() {
             require(['config'], function(config) {
                 new config();
+            });
+        },
+
+        message: function() {
+            require(['message'], function(message) {
+                new message();
             });
         },
 
