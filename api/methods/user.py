@@ -2,7 +2,7 @@ from api.models import User
 from api.helpers import *
 
 
-def list(request):
+def list_action(request):
     if not request.client.log_in:
         return not_logged_response()
 
@@ -31,10 +31,12 @@ def list(request):
         'items': array
     })
 
-def get(request):
+
+def get_action(request):
     pass
 
-def delete(request):
+
+def delete_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
@@ -47,3 +49,25 @@ def delete(request):
         return success_response('1')
     except User.DoesNotExist:
         return failure_response('User is not found')
+
+
+def search_action(request):
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    name = get_param_or_fail(request, 'name')
+
+    if not name:
+        return failure_response('Name is not defined')
+
+    users = User.objects.all().filter(name__contains=name)
+
+    array = []
+
+    for user in users:
+        array.append({
+            'id': user.id,
+            'name': user.name
+        })
+
+    return success_response(array)

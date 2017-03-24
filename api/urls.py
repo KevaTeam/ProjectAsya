@@ -42,9 +42,10 @@ urlpatterns = [
         ])),
 
         url(r'^user.', include([
-            url(r'^list$', user.list),
-            url(r'^get$', user.get),
-            url(r'^delete$', user.delete),
+            url(r'^list$', user.list_action),
+            url(r'^get$', user.get_action),
+            url(r'^delete$', user.delete_action),
+            url(r'^search$', user.search_action)
         ])),
 
         url(r'^quest.', include([
