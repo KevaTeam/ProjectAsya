@@ -138,3 +138,8 @@ STATICFILES_DIRS = [
 
 # Expires time for access token
 TOKEN_EXPIRED_TIME = datetime.timedelta(days=15)
+
+try:
+    from asya.parameters import *
+except ImportError as e:
+    pass

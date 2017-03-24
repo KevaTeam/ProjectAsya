@@ -2,6 +2,9 @@
 db.sqlite3
 frontend/templates/static/node_modules/*
 
+# Configs
+asya/parameters.py
+
 __pycache__/
 
 *.pyc
