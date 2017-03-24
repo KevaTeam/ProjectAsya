@@ -21,9 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
 
         parse: function(response) {
             response.type = 'edit';
-            console.log(response.tags);
             response.tags = response.tags.join(',');
-            console.log(response.tags);
 
             return response;
         }
