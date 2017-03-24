@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($, _, Backbone, wrapper) {
+define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap'], function($, _, Backbone, wrapper) {
 
     var Message = Backbone.Model.extend({
         defaults: {
@@ -24,17 +24,12 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         tagName: 'tr',
 
         events: {
-            'click .user_info': 'showUserInfo',
             'click .edit_button': 'showEditForm',
             'click .delete_button': 'showConfirmModal'
         },
 
         initialize: function() {
             this.template = _.template($('#item-template').html());
-        },
-        // Обработка нажатия кнопки информация
-        showUserInfo: function(el) {
-            App.Events.trigger('users:block:info:show', el);
         },
         // Обработка нажатия кнопки редактировать
         showEditForm: function(el) {
@@ -51,26 +46,64 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         }
     });
 
-    App.Models.UserInfo = Backbone.Model.extend({
-        url: 'user.get',
-
-        parse: function(response) {
-            return response;
-        }
-    });
-
-
     App.Views.Form = Backbone.View.extend({
-        initialize: function() {
-            this.template = _.template($('#form-template').html());
+        el: '.inputForm',
+
+        events: {
+            'change #inputType': 'updateType'
         },
 
-        show: function() {
+        initialize: function () {
+            this.template = _.template($('#form-template').html());
+
+            this.selectize = {
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                create: false,
+                load: function(query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: '/api/method/user.search',
+                        type: 'POST',
+                        data: {
+                            'name': encodeURIComponent(query),
+                            'access_token': $.cookie('token')
+                        },
+                        error: function() { callback(); },
+                        success: function(res) {
+                            callback(res.response.slice(0, 10));
+                        }
+                    });
+                },
+                render: {
+                    option: function(item, escape) {
+                        return '<div><span class="title">'+ item.name +'</span></div>';
+                    }
+                }
+            };
+        },
+
+        updateType: function (e) {
+            var $el = $(e.target),
+                selectedValue = $el.find(':selected').val();
+
+            if (selectedValue == 2) {
+                this.$el.find('.block-user').removeClass('hidden');
+            }
+            else {
+                this.$el.find('.block-user').addClass('hidden');
+            }
+        },
+
+        show: function () {
             this.$el.show();
         },
 
-        render: function() {
+        render: function () {
             this.$el.html(this.template(this.model.toJSON()));
+
+            this.$el.find('#inputUser').selectize(this.selectize);
             return this;
         }
     });
@@ -86,15 +119,6 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
 
         initialize: function() {
             wrapper.updateMenu('message');
-
-            var html = new EJS({url: 'static/templates/admin/messages/main.ejs'}).text;
-
-            wrapper.renderPage(html);
-
-            this.block = {
-                list: this.$el.find("#list"),
-                form: this.$el.find('.inputUserForm')
-            };
 
             this.collection = new List();
 
@@ -113,6 +137,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             App.Events.on('users:form:edit:show', this.showFormWithEdit, this);
             App.Events.on('users:modal:confirm:show', this.showConfirmModal, this);
             App.Events.on('users:form:message:show', this.showFormMessage, this);
+
+            this.render();
         },
 
         updateCount: function (items) {},
@@ -127,13 +153,13 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             this.block.list.find('#message-'+user.get('id')).replaceWith(view.render().el);
         },
         // Показываем форму
-        showForm: function(html) {
-            this.$el.find('.sidebar').hide();
-            this.block.form.html(html).show();
+        showForm: function(el) {
+            this.block.form.append(el).show();
         },
 
         showAddForm: function() {
             var form = new App.Views.Form({ model: new Message() });
+
             this.showForm(form.render().el);
         },
 
@@ -141,7 +167,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             var model = this.collection.get($(el.currentTarget).data('id'));
 
             var form = new App.Views.Form({ model: model });
-            this.showForm(form.render().el);
+            this.showForm(form.render().$el);
         },
 
         showConfirmModal: function(userId) {
@@ -192,6 +218,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
                     id: this.$el.find('#inputId').val(),
                     title: this.$el.find('#inputTitle').val(),
                     text: this.$el.find('#inputText').val(),
+                    user: this.$el.find('#inputUser').val(),
                     type: this.$el.find('#inputType').val()
                 },
                 self = this,
@@ -217,8 +244,20 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             });
 
         },
+
         destructTimer: function() {
             clearInterval(this.timerUsersList);
+        },
+
+        render: function () {
+            var html = new EJS({url: 'static/templates/admin/messages/main.ejs'}).text;
+
+            wrapper.renderPage(html);
+
+            this.block = {
+                list: this.$el.find("#list"),
+                form: this.$el.find('.inputForm')
+            };
         }
     });
 });

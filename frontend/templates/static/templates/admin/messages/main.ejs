@@ -3,20 +3,19 @@
 <div class="col-md-6 col-xs-6" style="background: #fff">
     <table class="table table-hover">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>Заголовок</th>
-            <th>Тип</th>
-            <th style="text-align: right">Действия</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Заголовок</th>
+                <th>Тип</th>
+                <th style="text-align: right">Действия</th>
+            </tr>
         </thead>
         <tbody id="list"></tbody>
     </table>
 </div>
-<div class="col-md-5 col-xs-5 col-md-offset-1 affix sidebar userInfoForm" style="right: 50px; top: 10px;"></div>
-
-<div class="col-md-5 col-xs-5 col-md-offset-1 affix sidebar inputUserForm" style="display: none; right: 50px; top: 10px;"></div>
+<div class="col-md-5 col-xs-5 col-md-offset-1 affix sidebar inputForm" style="display: none; right: 50px; top: 10px;"></div>
 <div class="modalWindow"></div>
+
 <script type="text/template" id="modal-template">
     <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -56,7 +55,10 @@
             <option value="2" <% if(type == 2) { %>selected<% } %>>Пользователю</option>
         </select>
     </div>
-
+    <div class="form-group block-user hidden">
+        <label for="inputUser">Выберите пользователя</label>
+        <select id="inputUser" placeholder="Начните вводить ник"></select>
+    </div>
     <input type="hidden" id="inputId" class="form-type" value="<%- id %>" />
     <button type="button" class="btn btn-success form-submit">Отправить</button>
 </script>

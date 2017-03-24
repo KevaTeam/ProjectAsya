@@ -28,3 +28,8 @@
 	height: 400px;
 	position: relative;
 }
+
+
+.hidden {
+    display: none;
+}
