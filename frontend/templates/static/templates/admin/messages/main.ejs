@@ -55,9 +55,14 @@
             <option value="2" <% if(type == 2) { %>selected<% } %>>Пользователю</option>
         </select>
     </div>
-    <div class="form-group block-user hidden">
+    <div class="form-group block-user <%= (type != 1 ? "hidden": "") %>>
         <label for="inputUser">Выберите пользователя</label>
-        <select id="inputUser" placeholder="Начните вводить ник"></select>
+        <select id="inputUser" placeholder="Начните вводить ник">
+        <% if (type == 2) { %>
+            <% console.log(user) %>
+            <option value="<%= user %>" selected></option>
+        <% } %>
+        </select>
     </div>
     <input type="hidden" id="inputId" class="form-type" value="<%- id %>" />
     <button type="button" class="btn btn-success form-submit">Отправить</button>
@@ -66,7 +71,7 @@
 <script type="text/template" id="item-template">
     <th scope="row"><%- id %></th>
     <td><%- title %></td>
-    <td><% if(type == 1) { %>для всех<% } else { %>для юзера<% } %></td>
+    <td><% if(type == 1) { %>Всем<% } else { %>Для юзера<% } %></td>
     <td style="text-align: right">
         <button type="button" class="btn btn-info btn-sm edit_button" data-id="<%- id %>"><span class="glyphicon glyphicon-pencil"></span></button>
         <button type="button" class="btn btn-danger btn-sm delete_button" data-id="<%- id %>" alt="Удалить"><span class="glyphicon glyphicon-remove"></span></button>

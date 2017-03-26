@@ -1,7 +1,11 @@
 from datetime import datetime
-from api.models import Message
+from api.models import Message, User
 from api.helpers import success_response, failure_response, get_param_or_fail, not_logged_response
 
+MESSAGE_TYPES = {
+    'all': 1,
+    'individual': 2
+}
 
 def list(request):
     if not request.client.log_in:
@@ -17,17 +21,24 @@ def list(request):
 def add(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
-
-    title = get_param_or_fail(request, 'title')
-    text = get_param_or_fail(request, 'text')
-    type = get_param_or_fail(request, 'type')
-
-    time = datetime.now()
-
     try:
-        message = Message(title=title, type=type, text=text, time=time)
+        title = get_param_or_fail(request, 'title')
+        text = get_param_or_fail(request, 'text')
+        type = get_param_or_fail(request, 'type')
+        user = get_param_or_fail(request, 'user', is_required=False)
+        time = datetime.now()
+
+        if user and int(type) == MESSAGE_TYPES['individual']:
+            user = User.objects.get(id=user)
+            user_id = user.id
+        else:
+            user_id = 0
+
+        message = Message(title=title, type=type, text=text, time=time, user=user_id)
 
         message.save()
+    except User.DoesNotExist as e:
+        return failure_response('User is not found')
     except Exception as e:
         return failure_response(e.args[0])
 
@@ -43,19 +54,29 @@ def edit(request):
     title = get_param_or_fail(request, 'title')
     text = get_param_or_fail(request, 'text')
     type = get_param_or_fail(request, 'type')
+    user = get_param_or_fail(request, 'user', is_required=False)
+    time = datetime.now()
 
     try:
-        category = Message.objects.get(id=id)
 
-        category.title = title
-        category.text = text
-        category.type = type
+        if user and int(type) == MESSAGE_TYPES['individual']:
+            user = User.objects.get(id=user)
+            user_id = user.id
+        else:
+            user_id = 0
+        message = Message.objects.get(id=id)
 
-        category.save()
+        message.title = title
+        message.text = text
+        message.type = type
+        message.time = time
+        message.user = user_id
+
+        message.save()
     except Message.DoesNotExist:
         return failure_response("Category with this id is not exists")
 
-    return success_response(category.id)
+    return success_response(message.id)
 
 
 def delete(request):

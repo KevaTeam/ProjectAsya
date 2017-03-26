@@ -1,12 +1,13 @@
-define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap'], function($, _, Backbone, wrapper) {
+define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap'], function ($, _, Backbone, wrapper) {
 
     var Message = Backbone.Model.extend({
         defaults: {
-            "id": 0,
-            "type": "0",
-            "title": "",
-            "text": "",
-            "time": new Date()
+            'id': 0,
+            'type': 0,
+            'title': '',
+            'text': "",
+            'user': '',
+            'time': new Date()
         }
     });
 
@@ -15,7 +16,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
 
         model: Message,
 
-        parse: function(response) {
+        parse: function (response) {
             return response.items;
         }
     });
@@ -28,19 +29,19 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             'click .delete_button': 'showConfirmModal'
         },
 
-        initialize: function() {
+        initialize: function () {
             this.template = _.template($('#item-template').html());
         },
         // Обработка нажатия кнопки редактировать
-        showEditForm: function(el) {
-            App.Events.trigger('users:form:edit:show', el);
+        showEditForm: function (el) {
+            App.Events.trigger('message:form:edit:show', el);
         },
         // Обработка нажатия кнопки удалить
-        showConfirmModal: function(el) {
-            App.Events.trigger('users:modal:confirm:show', $(el.currentTarget).data('id'));
+        showConfirmModal: function (el) {
+            App.Events.trigger('message:modal:confirm:show', $(el.currentTarget).data('id'));
         },
 
-        render: function() {
+        render: function () {
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
@@ -61,7 +62,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
                 labelField: 'name',
                 searchField: 'name',
                 create: false,
-                load: function(query, callback) {
+                load: function (query, callback) {
                     if (!query.length) return callback();
                     $.ajax({
                         url: '/api/method/user.search',
@@ -70,15 +71,17 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
                             'name': encodeURIComponent(query),
                             'access_token': $.cookie('token')
                         },
-                        error: function() { callback(); },
-                        success: function(res) {
+                        error: function () {
+                            callback();
+                        },
+                        success: function (res) {
                             callback(res.response.slice(0, 10));
                         }
                     });
                 },
                 render: {
-                    option: function(item, escape) {
-                        return '<div><span class="title">'+ item.name +'</span></div>';
+                    option: function (item, escape) {
+                        return '<div><span class="title">' + item.name + '</span></div>';
                     }
                 }
             };
@@ -117,7 +120,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             'click .edit-form': 'showFormWithEdit'
         },
 
-        initialize: function() {
+        initialize: function () {
             wrapper.updateMenu('message');
 
             this.collection = new List();
@@ -134,55 +137,57 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             // обнуляем обновление таймеров
             App.Events.on('page:update', this.destructTimer(), this);
 
-            App.Events.on('users:form:edit:show', this.showFormWithEdit, this);
-            App.Events.on('users:modal:confirm:show', this.showConfirmModal, this);
-            App.Events.on('users:form:message:show', this.showFormMessage, this);
+            App.Events.on('message:form:edit:show', this.showFormWithEdit, this);
+            App.Events.on('message:modal:confirm:show', this.showConfirmModal, this);
+            App.Events.on('message:form:message:show', this.showFormMessage, this);
 
             this.render();
         },
 
-        updateCount: function (items) {},
+        updateCount: function (items) {
+        },
 
-        tryCatch: function(str) {
+        tryCatch: function (str) {
             console.log(str);
         },
 
-        updateOneUser: function(user) {
-            var view = new App.ViewsList({ id: 'user-'+user.get('id'), model: user});
+        updateOneUser: function (user) {
+            var view = new App.ViewsList({id: 'user-' + user.get('id'), model: user});
 
-            this.block.list.find('#message-'+user.get('id')).replaceWith(view.render().el);
+            this.block.list.find('#message-' + user.get('id')).replaceWith(view.render().el);
         },
+
         // Показываем форму
-        showForm: function(el) {
+        showForm: function (el) {
             this.block.form.append(el).show();
         },
 
-        showAddForm: function() {
-            var form = new App.Views.Form({ model: new Message() });
+        showAddForm: function () {
+            var form = new App.Views.Form({model: new Message()});
 
             this.showForm(form.render().el);
         },
 
-        showFormWithEdit: function(el) {
+        showFormWithEdit: function (el) {
             var model = this.collection.get($(el.currentTarget).data('id'));
 
-            var form = new App.Views.Form({ model: model });
+            var form = new App.Views.Form({model: model});
             this.showForm(form.render().$el);
         },
 
-        showConfirmModal: function(userId) {
+        showConfirmModal: function (userId) {
             var model = Backbone.Model.extend({}),
                 self = this;
 
-            var modal = new App.Views.Modal({ model: new model({ 'id': userId })});
+            var modal = new App.Views.Modal({model: new model({'id': userId})});
 
             var modalWindow = this.$el.find('.modalWindow').html(modal.render().el).find('.modal');
             modalWindow.modal('show');
 
-            this.listenTo(modal, 'submit', function() {
+            this.listenTo(modal, 'submit', function () {
                 var model = Backbone.Model.extend({
                     url: 'message.delete',
-                    parse: function(response){
+                    parse: function (response) {
                         var c = self.collection.get(userId);
                         self.collection.remove(c);
                         modalWindow.modal('hide');
@@ -190,30 +195,30 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
                 });
 
                 model = new model();
-                model.fetch({ params: { id: userId } });
-                self.listenTo(model, 'error', function(response) {
+                model.fetch({params: {id: userId}});
+                self.listenTo(model, 'error', function (response) {
                     alert('Error! ' + response.message);
                 });
             });
         },
 
-        showFormMessage: function(text) {
+        showFormMessage: function (text) {
             this.$el.find('.form-message').show().text(text);
         },
 
-        addItemToList: function(model) {
-            var view = new App.ViewsList({ id: 'message-' + model.get('id'), model: model});
+        addItemToList: function (model) {
+            var view = new App.ViewsList({id: 'message-' + model.get('id'), model: model});
 
             this.block.list.append(view.render().el);
         },
 
-        removeOneUser: function(user) {
-            this.block.list.find('#message-'+user.id).remove();
+        removeOneUser: function (user) {
+            this.block.list.find('#message-' + user.id).remove();
             this.updateCount(this.$el.find('#list tr'));
             return true;
         },
 
-        addItem: function() {
+        addItem: function () {
             var params = {
                     id: this.$el.find('#inputId').val(),
                     title: this.$el.find('#inputTitle').val(),
@@ -223,29 +228,29 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
                 },
                 self = this,
                 isNew = (params.id == 0);
-            console.log(params);
+
             var model = Backbone.Model.extend({
                 url: 'message.' + (isNew ? 'add' : 'edit'),
 
-                parse: function(response){
-                    self.listenToOnce(self.collection, (isNew ? 'add' : 'change'), function(model) {
+                parse: function (response) {
+                    self.listenToOnce(self.collection, (isNew ? 'add' : 'change'), function (model) {
                         self.$el.find('.sidebar').hide();
                     });
 
                     self.collection.fetch();
-                 }
+                }
             });
 
             model = new model();
-            model.fetch({ params: params });
+            model.fetch({params: params});
 
-            this.listenTo(model, 'error', function(response) {
+            this.listenTo(model, 'error', function (response) {
                 App.Events.trigger('users:form:message:show', response.message);
             });
 
         },
 
-        destructTimer: function() {
+        destructTimer: function () {
             clearInterval(this.timerUsersList);
         },
 

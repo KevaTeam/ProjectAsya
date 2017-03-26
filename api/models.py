@@ -160,6 +160,7 @@ class Attempt(models.Model):
 
         super(Attempt, self).save(*args, **kwargs)
 
+
 class Message(models.Model):
     MESSAGE_TYPE = (
         (1, 'Для пользователя'),
@@ -169,7 +170,7 @@ class Message(models.Model):
     title = models.CharField(max_length=100)
     text = models.TextField()
     time = models.DateTimeField('Дата создания новости')
-
+    user = models.IntegerField(default=0)
 
 
 class Setting(models.Model):
