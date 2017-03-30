@@ -3,7 +3,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
     var Message = Backbone.Model.extend({
         defaults: {
             'id': 0,
-            'type': 0,
+            'type': 1,
             'title': '',
             'text': "",
             'user': '',
@@ -32,10 +32,12 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
         initialize: function () {
             this.template = _.template($('#item-template').html());
         },
+
         // Обработка нажатия кнопки редактировать
         showEditForm: function (el) {
             App.Events.trigger('message:form:edit:show', el);
         },
+
         // Обработка нажатия кнопки удалить
         showConfirmModal: function (el) {
             App.Events.trigger('message:modal:confirm:show', $(el.currentTarget).data('id'));
@@ -129,7 +131,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             this.listenTo(this.collection, 'sync', this.updateCount);
             this.listenTo(this.collection, 'add', this.addItemToList);
             this.listenTo(this.collection, 'remove', this.removeOneUser);
-            this.listenTo(this.collection, 'change', this.updateOneUser);
+            this.listenTo(this.collection, 'change', this.update);
 
             // Обновление информации
             this.collection.fetch();
@@ -144,17 +146,12 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             this.render();
         },
 
-        updateCount: function (items) {
-        },
+        updateCount: function (items) {},
 
-        tryCatch: function (str) {
-            console.log(str);
-        },
+        update: function (model) {
+            var view = new App.ViewsList({id: 'item-' + user.get('id'), model: model});
 
-        updateOneUser: function (user) {
-            var view = new App.ViewsList({id: 'user-' + user.get('id'), model: user});
-
-            this.block.list.find('#message-' + user.get('id')).replaceWith(view.render().el);
+            this.block.list.find('#item-' + user.get('id')).replaceWith(view.render().el);
         },
 
         // Показываем форму
@@ -175,11 +172,11 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             this.showForm(form.render().$el);
         },
 
-        showConfirmModal: function (userId) {
+        showConfirmModal: function (id) {
             var model = Backbone.Model.extend({}),
                 self = this;
 
-            var modal = new App.Views.Modal({model: new model({'id': userId})});
+            var modal = new App.Views.Modal({model: new model({'id': id})});
 
             var modalWindow = this.$el.find('.modalWindow').html(modal.render().el).find('.modal');
             modalWindow.modal('show');
@@ -213,7 +210,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
         },
 
         removeOneUser: function (user) {
-            this.block.list.find('#message-' + user.id).remove();
+            this.block.list.find('#item-' + user.id).remove();
             this.updateCount(this.$el.find('#list tr'));
             return true;
         },
@@ -242,17 +239,18 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
             });
 
             model = new model();
-            model.fetch({params: params});
+            model.fetch({
+                method: 'POST',
+                params: params
+            });
 
             this.listenTo(model, 'error', function (response) {
-                App.Events.trigger('users:form:message:show', response.message);
+                App.Events.trigger('message:form:message:show', response.message);
             });
 
         },
 
-        destructTimer: function () {
-            clearInterval(this.timerUsersList);
-        },
+        destructTimer: function () {},
 
         render: function () {
             var html = new EJS({url: 'static/templates/admin/messages/main.ejs'}).text;
