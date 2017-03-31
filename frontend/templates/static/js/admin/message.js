@@ -149,9 +149,11 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
         updateCount: function (items) {},
 
         update: function (model) {
-            var view = new App.ViewsList({id: 'item-' + user.get('id'), model: model});
+            var view = new App.ViewsList({id: 'message-' + model.get('id'), model: model});
 
-            this.block.list.find('#item-' + user.get('id')).replaceWith(view.render().el);
+            console.log(view);
+            console.log(this.block.list.find('#message-' + model.get('id')));
+            this.block.list.find('#message-' + model.get('id')).replaceWith(view.render().el);
         },
 
         // Показываем форму
@@ -185,14 +187,14 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
                 var model = Backbone.Model.extend({
                     url: 'message.delete',
                     parse: function (response) {
-                        var c = self.collection.get(userId);
+                        var c = self.collection.get(id);
                         self.collection.remove(c);
                         modalWindow.modal('hide');
                     }
                 });
 
                 model = new model();
-                model.fetch({params: {id: userId}});
+                model.fetch({params: {id: id}});
                 self.listenTo(model, 'error', function (response) {
                     alert('Error! ' + response.message);
                 });
@@ -210,7 +212,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
         },
 
         removeOneUser: function (user) {
-            this.block.list.find('#item-' + user.id).remove();
+            this.block.list.find('#message-' + user.id).remove();
             this.updateCount(this.$el.find('#list tr'));
             return true;
         },
