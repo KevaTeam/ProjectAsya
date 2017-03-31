@@ -20,7 +20,7 @@ define(['backbone', 'wrapper'], function(Backbone, wrapper) {
         },
      
         index: function() {
-            var html = new EJS({url: 'static/templates/admin/monitor/main.ejs'}).text;
+            var html = new EJS({url: '/static/templates/admin/monitor/main.ejs'}).text;
 
             wrapper.renderPage(html);
             require(['monitor'], function(monitor) {

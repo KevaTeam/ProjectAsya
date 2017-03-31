@@ -164,7 +164,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
         initialize: function() {
             wrapper.updateMenu('quest');
 
-            var html = new EJS({url: 'static/templates/admin/quests/main.ejs'}).text;
+            var html = new EJS({url: '/static/templates/admin/quests/main.ejs'}).text;
 
             wrapper.renderPage(html);
 

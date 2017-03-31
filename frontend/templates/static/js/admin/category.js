@@ -78,7 +78,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         initialize: function() {
             wrapper.updateMenu('category');
 
-            var html = new EJS({url: 'static/templates/admin/category/main.ejs'}).text;
+            var html = new EJS({url: '/static/templates/admin/category/main.ejs'}).text;
 
             wrapper.renderPage(html);
 

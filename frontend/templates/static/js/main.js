@@ -159,7 +159,7 @@ $(function() {
         },
 
         renderOnce: function() {
-            this.$el.html(new EJS({url: 'static/templates/timer/Timer.ejs'}).render());
+            this.$el.html(new EJS({url: '/static/templates/timer/Timer.ejs'}).render());
         },
 
         render: function() {
@@ -258,7 +258,7 @@ $(function() {
         },
 
         render: function() {
-            this.$el.html(new EJS({url: 'static/templates/end/Main.ejs'}).render());
+            this.$el.html(new EJS({url: '/static/templates/end/Main.ejs'}).render());
         }
     });
 
@@ -276,7 +276,7 @@ $(function() {
             this.render();
             if (!$.cookie('feedback') || $.cookie('feedback') != 1) {
                 setTimeout(function() {
-                    App.Views.Main.$el.find('.modal-content').html(new EJS({url: 'static/templates/quest/Feedback.ejs'}).render({}));
+                    App.Views.Main.$el.find('.modal-content').html(new EJS({url: '/static/templates/quest/Feedback.ejs'}).render({}));
                     $('#myModal').modal({})
                     $.cookie('feedback', 1, { expires: 10 });
                 }, 4000);
@@ -288,7 +288,7 @@ $(function() {
             App.Views.Main.render(this.$el);
         },
         render: function() {
-            this.$el.html(new EJS({url: 'static/templates/quest/Wrapper.ejs'}).render());
+            this.$el.html(new EJS({url: '/static/templates/quest/Wrapper.ejs'}).render());
             return this;
         }
     });
@@ -346,7 +346,7 @@ $(function() {
             });
             // Список категорий в квестах
             sections = _.map(array.attributes, function(num, key){ return { id: key, title: num[0].section.title }} );
-            this.$el.html(new EJS({url: 'static/templates/quest/QuestList.ejs'}).render({ sections: sections, arr: array.attributes }));
+            this.$el.html(new EJS({url: '/static/templates/quest/QuestList.ejs'}).render({ sections: sections, arr: array.attributes }));
 
             return this;
         }
@@ -366,7 +366,7 @@ $(function() {
         },
         render: function(quest) {
             this.quest = quest;
-            this.$el.html(new EJS({url: 'static/templates/quest/Modal.ejs'}).render(quest));
+            this.$el.html(new EJS({url: '/static/templates/quest/Modal.ejs'}).render(quest));
             return this;
         }
     });
@@ -486,7 +486,7 @@ $(function() {
         },
 
         render: function (array) {
-            this.$el.html(new EJS({url: 'static/templates/quest/UserList.ejs'}).render({
+            this.$el.html(new EJS({url: '/static/templates/quest/UserList.ejs'}).render({
                 myRole: App.cache.role,
                 user: array.attributes.response
             }));
@@ -670,7 +670,7 @@ $(function() {
         },
 
         render: function() {
-            this.$el.html(new EJS({url: 'static/templates/login.ejs'}).render());
+            this.$el.html(new EJS({url: '/static/templates/login.ejs'}).render());
 
             return this;
         }

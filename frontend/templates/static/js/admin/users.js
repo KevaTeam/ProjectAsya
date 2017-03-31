@@ -102,7 +102,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
         initialize: function() {
             wrapper.updateMenu('users');
 
-            var html = new EJS({url: 'static/templates/admin/users/main.ejs'}).text;
+            var html = new EJS({url: '/static/templates/admin/users/main.ejs'}).text;
 
             wrapper.renderPage(html);
 

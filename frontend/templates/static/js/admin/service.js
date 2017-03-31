@@ -80,7 +80,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap', 'ace'], func
         initialize: function() {
             wrapper.updateMenu('service');
 
-            var html = new EJS({url: 'static/templates/admin/services/main.ejs'}).text;
+            var html = new EJS({url: '/static/templates/admin/services/main.ejs'}).text;
 
             wrapper.renderPage(html);
 

@@ -255,7 +255,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'selectize', 'bootstrap']
         destructTimer: function () {},
 
         render: function () {
-            var html = new EJS({url: 'static/templates/admin/messages/main.ejs'}).text;
+            var html = new EJS({url: '/static/templates/admin/messages/main.ejs'}).text;
 
             wrapper.renderPage(html);
 

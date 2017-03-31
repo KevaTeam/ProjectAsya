@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl: 'static/js/admin',
+    baseUrl: '/static/js/admin',
     paths: {
         app: '../app',
         ace: '//ace.c9.io/build/src/ace',

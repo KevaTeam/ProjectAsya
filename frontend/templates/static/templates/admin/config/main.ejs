@@ -10,13 +10,13 @@
                 <div class="col-md-6">
                     <label for="inputSection">Время начала соревнования</label>
                     <div class='input-group date' id='round_length'>
-                        <input type='text' class="form-control" />
+                        <input type='text' class="form-control config__datetime-start" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="inputSection">Время окончания соревнования</label>
                     <div class='input-group date' id='round_length'>
-                        <input type='text' class="form-control" />
+                        <input type='text' class="form-control config__datetime-end" />
                     </div>
                 </div>
             </div>
@@ -26,13 +26,13 @@
         <h3>Работа с резервными копиями</h3>
         <div class="form-group">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                 <h4>Сохранить</h4>
                     <button type="button" class="btn btn-primary submit-flags">Скачать backup</button>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <h4>Загрузить</h4>
-                    <input type="file" id="backup_file" />
+                    <input type="file" id="backup_file" style="display: inline-block;"/>
                     <button type="button" class="btn btn-primary submit-flags">Загрузить backup</button>
                 </div>
             </div>
@@ -40,4 +40,4 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="/css/datetimepicker.css">
+<link rel="stylesheet" href="static/css/datetimepicker.css">
