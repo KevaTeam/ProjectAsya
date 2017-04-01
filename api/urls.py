@@ -37,8 +37,9 @@ urlpatterns = [
         ])),
 
         url(r'^timer.', include([
-            url(r'^get$', timer.get),
-            url(r'^current$', timer.current),
+            url(r'^get$', timer.get_action),
+            url(r'^set$', timer.set_action),
+            url(r'^current$', timer.current_action),
         ])),
 
         url(r'^user.', include([

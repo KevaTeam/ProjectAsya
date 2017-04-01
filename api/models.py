@@ -173,6 +173,6 @@ class Message(models.Model):
     user = models.IntegerField(default=0)
 
 
-class Setting(models.Model):
+class Config(models.Model):
     key = models.CharField(max_length=32, blank=False)
     value = models.CharField(max_length=255, blank=False)
