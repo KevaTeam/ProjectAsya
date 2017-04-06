@@ -265,7 +265,12 @@ $(function() {
     App.Models.Timer = Backbone.Model.extend({
         url: 'timer.get',
 
-        parse: function(time) { return time; }
+        parse: function(response) {
+            return {
+                'start': response.start.delta,
+                'end': response.end.delta
+            };
+        }
     });
 
     App.Views.Tasks = Backbone.View.extend({
@@ -274,13 +279,6 @@ $(function() {
         initialize: function() {
 
             this.render();
-            if (!$.cookie('feedback') || $.cookie('feedback') != 1) {
-                setTimeout(function() {
-                    App.Views.Main.$el.find('.modal-content').html(new EJS({url: '/static/templates/quest/Feedback.ejs'}).render({}));
-                    $('#myModal').modal({})
-                    $.cookie('feedback', 1, { expires: 10 });
-                }, 4000);
-            }
             new App.Views.UserList({ el: this.$el.find('#users') });
 
             new App.Views.QuestList({ el: this.$el.find('#quest') });
