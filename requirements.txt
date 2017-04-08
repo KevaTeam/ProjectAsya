@@ -1,0 +1,3 @@
+uwsgi
+django
+mysqlclient	
