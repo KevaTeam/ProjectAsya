@@ -490,6 +490,10 @@ $(function() {
                 user: array.attributes.response
             }));
 
+            if (!$.cookie('isAdmin')) {
+                this.$el.find('.admin').hide();
+            }
+
             this.updateNews();
             var self = this;
 
