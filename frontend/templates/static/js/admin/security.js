@@ -20,8 +20,6 @@ define(['backbone', 'underscore', 'wrapper', 'router'], function(Backbone, wrapp
                 // Инициализация роутинга
                 new router();
             }
-        },
-
-
+        }
     });
 });

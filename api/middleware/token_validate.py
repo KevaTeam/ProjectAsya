@@ -11,7 +11,7 @@ class Client():
         try:
             user = Token.objects.get(token=token, expires__gte=datetime.now())
             self.user = user.uid
-            self.user_id = user.id
+            self.user_id = user.uid.id
             self.permission = user.scope
             self.log_in = True
 
@@ -20,7 +20,8 @@ class Client():
             return False
 
     def is_admin(self):
-        return self.log_in and self.permission
+        print(self.permission)
+        return self.log_in and self.permission == 2
 
     def is_user(self):
         return self.log_in

@@ -160,6 +160,9 @@ $(function() {
 
         renderOnce: function() {
             this.$el.html(new EJS({url: '/static/templates/timer/Timer.ejs'}).render());
+            if ($.cookie('isAdmin')) {
+                this.$el.find('.admin_button').show();
+            }
         },
 
         render: function() {
@@ -554,7 +557,7 @@ $(function() {
 
             auth.fetch({ params: {
                 client_id: App.config.client_id,
-                username: this.params.nick,
+                username: this.params.username,
                 password: this.params.password
             }});
 
@@ -571,8 +574,8 @@ $(function() {
         id: 'container',
 
         events: {
+            'keypress .form-signin input': 'updateOnEnter',
             'click button#submit': "submit",
-
             'click button#button-signup': 'signupForm',
             'click button#button-login': 'loginForm'
         },
@@ -601,22 +604,16 @@ $(function() {
             var params = {
                 mail: this.$el.find('#inputSignupEmail').val(),
                 username: this.$el.find('#inputSignupLogin').val(),
-                university: this.$el.find('#inputSignupUniversity').val(),
                 password: this.$el.find('#inputSignupPassword').val()
             };
-
-            if (params.nick == "") {
+            console.log(params);
+            if (params.username == "") {
                 this.message("Не введен логин");
                 return false;
             }
 
             if (params.password == "") {
                 this.message("Не введен пароль");
-                return false;
-            }
-
-            if (params.university == "") {
-                this.message("Не введен вуз");
                 return false;
             }
 
@@ -657,13 +654,16 @@ $(function() {
             return false;
         },
 
-        submit: function (el) {
-            el.preventDefault();
-            var type = $(el.target).data('type');
-            
+        submit: function (e) {
+            e.preventDefault();
+            var type = $(e.target).closest('.form').data('type');
+
             return type == 'login' ? this.submitLogin() : this.submitSignup();
         },
 
+        updateOnEnter: function(e) {
+            if (e.keyCode == 13) this.submit(e);
+        },
         message: function(text) {
             console.log(text);
             this.$el.find('.message').show().html(text);
