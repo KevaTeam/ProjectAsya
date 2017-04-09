@@ -129,9 +129,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/app/'
+STATIC_ROOT = '/app/platform/frontend/templates/static'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/templates/static")
+    "/"
 ]
 
 # Expires time for access token

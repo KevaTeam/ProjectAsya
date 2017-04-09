@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Jacob chenjr0719@gmail.com
+MAINTAINER Dmitry Mukovkin mukovkin@yandex.ru
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -28,11 +28,10 @@ COPY docker/my.cnf /etc/mysql/
 COPY docker/uwsgi.ini /app/
 COPY docker/uwsgi_params /app/
 
-# Model_example content
-COPY . /app/
-
 # Copy initialization scripts
 COPY docker/start.sh /app/
 
+VOLUME ["/app/platform"]
 EXPOSE 80
+
 CMD ["/bin/bash", "/app/start.sh"]

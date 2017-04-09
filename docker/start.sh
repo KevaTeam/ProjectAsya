@@ -1,8 +1,6 @@
 #!/bin/bash
 
-SETTING_PATH=`find /app/ -name settings.py`
-
-pip3 install -r /app/requirements.txt
+pip3 install -r /app/platform/requirements.txt
 
 echo "Start mysql server"
 
@@ -23,18 +21,24 @@ mysqladmin -u root password $MYSQL_ROOT_PASSWORD
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE asya DEFAULT CHARACTER SET utf8; GRANT ALL PRIVILEGES ON asya.* TO 'asya'@'localhost' IDENTIFIED BY '$MYSQL_DJANGO_PASSWORD'; FLUSH PRIVILEGES;"
 
-replace "%DATABASE_PASSWORD%" "$MYSQL_ROOT_PASSWORD" -- /app/docker/docker-django-config.py
+cp /app/platform/docker/docker-django-config.py /app/platform/asya/parameters.py
 
-cp /app/docker/docker-django-config.py /app/asya/parameters.py
+replace "%DATABASE_PASSWORD%" "$MYSQL_ROOT_PASSWORD" -- /app/platform/asya/parameters.py
 
-# Django setting
-python3 /app/manage.py makemigrations --noinput
-python3 /app/manage.py migrate
 
-echo yes | python3 /app/manage.py collectstatic
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', '$DJANGO_ADMIN_PASSWORD')" | python3 /app/manage.py shell
+# Django делает миграции на сервер БД
+python3 /app/platform/manage.py makemigrations --noinput
+python3 /app/platform/manage.py makemigrations api
+python3 /app/platform/manage.py migrate
 
+# Собираем все картинки в одной папке
+echo yes | python3 /app/platform/manage.py collectstatic --noinput
+
+# Создаем глобального администратора
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', '$DJANGO_ADMIN_PASSWORD')" | python3 /app/platform/manage.py shell
+
+# Останавливаем процессы MySQL
 killall mysqld
 
-# Start all the services
+# Запускаем MySQL, nginx, uwsgi
 /usr/bin/supervisord -n
