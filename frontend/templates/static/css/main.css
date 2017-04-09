@@ -2,6 +2,7 @@ body {
     background-color: #eee;
 }
 
+
 .container {
     width: 100%;
 }
@@ -92,6 +93,7 @@ body {
 }
 @media (min-width: 768px) {
     .sidebar {
+        width: 400px;
         position: fixed;
         top: 0;
         bottom: 0;
@@ -155,6 +157,7 @@ body {
 }
 @media (min-width: 768px) {
     .main {
+        margin-left: 400px;
         padding-right: 40px;
         padding-left: 40px;
     }
@@ -163,7 +166,17 @@ body {
     margin-top: 0;
 }
 
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 440px;
+    right: 0;
+    padding: 10px 40px 10px 0;
+}
 
+    .footer .timer {
+
+    }
 /*
  * Placeholder dashboard ideas
  */

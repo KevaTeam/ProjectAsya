@@ -264,11 +264,22 @@ $(function() {
 
     App.Models.Timer = Backbone.Model.extend({
         url: 'timer.get',
-
+        default_time: {
+            start: 0,
+            end: 3600
+        },
         parse: function(response) {
+            var start = 0,
+                end = 3600;
+
+            if (response.start && !response.end) {
+                start = response.start.delta;
+                end = response.end.delta;
+            }
+
             return {
-                'start': response.start.delta,
-                'end': response.end.delta
+                'start': start,
+                'end': end
             };
         }
     });
