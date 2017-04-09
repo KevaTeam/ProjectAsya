@@ -37,12 +37,12 @@ $(function() {
 
     App.Router = Backbone.Router.extend({
         routes: {
-            "login":                "login",
-            'tasks':                "tasks",
-            "timer":                "timer",
-            "logout":               "logout",
-            "end":                  "end",
-            "": "timer"
+            "login":  "login",
+            'tasks':  "tasks",
+            "timer":  "timer",
+            "logout": "logout",
+            "end":    "end",
+            "":       "timer"
         },
 
         initialize: function() {
@@ -442,6 +442,7 @@ $(function() {
 
     App.Views.UserList = Backbone.View.extend({
         events: {
+            'click .admin': 'admin',
             'click .logout': 'logout',
             'click .news': 'news',
             'click .rating': 'rating'
@@ -454,6 +455,10 @@ $(function() {
             Backbone.Events.on('users:update', this.update, this);
 
             this.update();
+        },
+
+        admin: function () {
+            window.location.href = '/admin';
         },
 
         logout: function() {
@@ -476,22 +481,7 @@ $(function() {
         },
 
         updateNews: function () {
-            this.$el.find('#vk_groups').empty();
-            if(typeof VK !== "undefined") {
-                VK.Widgets.Group("vk_groups", {
-                    mode: 2,
-                    width: "225",
-                    height: "570",
-                    color1: 'FFFFFF',
-                    color2: '2B587A',
-                    color3: '#5cb85c'
-                }, 101763977);
-            }
-            else {
-                console.log('VK is not defined');
-                console.log(this.$el.find('#vk_groups'));
-                this.$el.find('#vk_groups').html('У вас заблокирован доступ к сайту ВКонтакте, для просмотра новостей разблокируйте его.')
-            }
+            this.$el.find('#vk_groups').html('В разработке.')
         },
 
         render: function (array) {
@@ -502,13 +492,7 @@ $(function() {
 
             this.updateNews();
             var self = this;
-            clearInterval(App.VK);
 
-            if(typeof VK !== 'undefined') {
-                App.VK = setInterval(function () {
-                    self.updateNews();
-                }, 60000);
-            }
             return this;
         }
 
@@ -531,6 +515,9 @@ $(function() {
             $.cookie('token', params.access_token, { expires: parseInt(dayDiff) });
             $.cookie('user_id', params.user_id, { expires: parseInt(dayDiff) });
 
+            if (params.role === 2) {
+                $.cookie('isAdmin', 'true', { expires: parseInt(dayDiff) });
+            }
             // Сохраняем роль пользоватлея
             App.cache.role = params.role;
 
