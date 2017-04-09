@@ -272,7 +272,7 @@ $(function() {
             var start = 0,
                 end = 3600;
 
-            if (response.start && !response.end) {
+            if (response.start && response.end) {
                 start = response.start.delta;
                 end = response.end.delta;
             }

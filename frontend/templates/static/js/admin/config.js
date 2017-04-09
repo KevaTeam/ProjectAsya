@@ -33,7 +33,18 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             this.startEndSetting = new startEndSettingModel;
             this.startEndSetting.on('change', this.setStartEnd, this);
             this.startEndSetting.fetch({params: {key: 'datetime_start'}});
+        },
 
+        initForms: function () {
+            var fields = ['start', 'end'];
+
+            for (var index in fields) {
+                this.$el.find('.config__datetime-' + fields[index]).datetimepicker({
+                    locale: 'ru',
+                    format: "DD-MM-YYYY HH:mm:ss",
+                    defaultDate: new Date()
+                });
+            }
         },
 
         message: {
@@ -61,7 +72,6 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
         },
 
         setStartEnd: function (model) {
-            console.log(model);
             var fields = ['start', 'end'];
 
             for (var index in fields) {
@@ -85,7 +95,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
 
             this.$el.find('.success-message').hide();
 
-            this.listenTo(timer, 'sync', function() {
+            this.listenTo(timer, 'sync', function () {
                 this.$el.find('.success-message').show();
             }, this);
         },
@@ -93,6 +103,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
         render: function () {
             this.template = _.template($('#date-template').html());
             this.$el.html(this.template());
+
+            this.initForms();
 
             return this;
         }

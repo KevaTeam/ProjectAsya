@@ -2,7 +2,6 @@ body {
     background-color: #eee;
 }
 
-
 .container {
     width: 100%;
 }
@@ -13,13 +12,16 @@ body {
     padding: 15px;
     margin: 0 auto;
 }
+
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
     margin-bottom: 10px;
 }
+
 .form-signin .checkbox {
     font-weight: normal;
 }
+
 .form-signin .form-control {
     position: relative;
     height: auto;
@@ -29,21 +31,24 @@ body {
     padding: 10px;
     font-size: 16px;
 }
+
 .form-signin .form-control:focus {
     z-index: 2;
 }
+
 .form-signin input[type="email"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
 .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-/* End signup */
 
+/* End signup */
 
 /* Timer */
 .timer {
@@ -54,10 +59,12 @@ body {
     font-size: 50px;
     margin-top: 200px;
 }
+
 .timer .text {
     font-size: 20px;
     margin-top: 30px;
 }
+
 /* Eтв timer */
 
 /* Tasks */
@@ -66,6 +73,14 @@ body {
     bottom: 10px;
     right: 10px;
 }
+
+.page_timer .admin_button {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 100px;
+}
+
 /*
  * Global add-ons
  */
@@ -91,6 +106,7 @@ body {
 .sidebar {
     display: none;
 }
+
 @media (min-width: 768px) {
     .sidebar {
         width: 400px;
@@ -117,6 +133,7 @@ body {
 .no-padding {
     padding: 0;
 }
+
 .number {
     font-size: 40px;
     margin-top: 15px;
@@ -128,6 +145,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
 }
+
 /* Sidebar navigation */
 .nav-sidebar {
     margin-right: -21px; /* 20px padding + 1px border */
@@ -136,17 +154,18 @@ body {
     float: left;
     padding-left: 12px;
 }
+
 .nav-sidebar li a {
     padding-right: 20px;
     padding-left: 20px;
 }
+
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
     color: #fff;
     background-color: #428bca;
 }
-
 
 /*
  * Main content
@@ -155,6 +174,7 @@ body {
 .main {
     padding: 20px;
 }
+
 @media (min-width: 768px) {
     .main {
         margin-left: 400px;
@@ -162,6 +182,7 @@ body {
         padding-left: 40px;
     }
 }
+
 .main .page-header {
     margin-top: 0;
 }
@@ -174,9 +195,9 @@ body {
     padding: 10px 40px 10px 0;
 }
 
-    .footer .timer {
+.footer .timer {
+}
 
-    }
 /*
  * Placeholder dashboard ideas
  */
@@ -185,9 +206,11 @@ body {
     margin-bottom: 30px;
     text-align: center;
 }
+
 .placeholders h4 {
     margin-bottom: 0;
 }
+
 .placeholder {
     margin-bottom: 20px;
 }
@@ -196,4 +219,5 @@ body {
     display: inline-block;
     border-radius: 50%;
 }
+
 /* End tasks */
