@@ -91,7 +91,7 @@ def delete_quest(request):
 
 
 def list_quest(request):
-    quests = Quest.objects.raw('SELECT q.*, COUNT(uq.`end`) AS `passed` FROM api_quest AS q LEFT JOIN api_userquest AS uq ON (q.id = uq.quest_id) GROUP BY q.id')
+    quests = Quest.objects.raw('SELECT q.*, COUNT(uq.`end`) AS `passed` FROM api_quest AS q LEFT JOIN api_userquest AS uq ON (q.id = uq.quest_id AND uq.user_id = '+ str(request.client.user_id) +') GROUP BY q.id')
     print(quests)
     array = []
     for quest in quests:
