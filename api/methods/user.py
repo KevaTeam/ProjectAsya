@@ -8,10 +8,11 @@ def list_action(request):
 
     order = request.GET.get('order', False)
 
-    if order != 'rating':
-        order = '?'
+    users = User.objects.all()
 
-    users = User.objects.all().order_by(order)
+    if order == 'rating':
+        users = users.order_by('-rating')
+
     array = []
 
     for user in users:
