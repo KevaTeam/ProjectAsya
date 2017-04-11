@@ -53,7 +53,13 @@ class User(models.Model):
 
 
 class QuestCategory(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(
+        max_length=30,
+        unique=True,
+        error_messages={
+            'unique': 'The user with same username is already exists'
+        }
+    )
 
     def __str__(self):
         return self.name
