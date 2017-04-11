@@ -1,6 +1,8 @@
 .idea/
 db.sqlite3
-frontend/templates/static/node_modules/*
+frontend/templates/static/*
+
+frontend/static/node_modules/*
 
 # Configs
 asya/parameters.py

@@ -131,7 +131,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 STATIC_ROOT = 'frontend/templates/static'
 STATICFILES_DIRS = [
-    "/"
+    os.path.join(BASE_DIR, "frontend/static/")
 ]
 
 # Expires time for access token
