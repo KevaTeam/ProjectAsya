@@ -91,8 +91,23 @@ def delete_quest(request):
 
 
 def list_quest(request):
-    quests = Quest.objects.raw('SELECT q.*, COUNT(uq.`end`) AS `passed` FROM api_quest AS q LEFT JOIN api_userquest AS uq ON (q.id = uq.quest_id AND uq.user_id = '+ str(request.client.user_id) +') GROUP BY q.id')
-    print(quests)
+    quests = Quest.objects.raw('''
+        SELECT
+            q.*,
+            COUNT(uq1.id) > 0 AS passed,
+            COUNT(uq2.id) AS `count`
+        FROM api_quest AS q
+            LEFT JOIN api_userquest AS uq1 ON (
+                q.id = uq1.quest_id AND
+                uq1.user_id = %s AND
+                uq1.end > 0
+            )
+            LEFT JOIN api_userquest AS uq2 ON (
+                q.id = uq2.quest_id AND
+                uq2.end IS NOT NULL
+            )
+        GROUP BY q.id''', str(request.client.user_id))
+
     array = []
     for quest in quests:
         q = quest.to_list()
@@ -102,10 +117,9 @@ def list_quest(request):
                 'answer': quest.answer
             })
 
-        #TODO: исправить, когда база будет использоваться на полную
         q.update({
-            'count': 0,
-            'author': 'noname',
+            'count': quest.count,
+            'author': '',
             'full_text': q['text']
         })
 
