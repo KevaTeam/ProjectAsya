@@ -11,7 +11,18 @@ def list_action(request):
     users = User.objects.all()
 
     if order == 'rating':
-        users = users.order_by('-rating')
+        users = User.objects.raw('''
+           SELECT
+               u.*,
+               MAX(uq.end) AS last_passed_quest
+           FROM api_user AS u
+               LEFT JOIN api_userquest AS uq ON (
+                   uq.user_id = u.id AND
+                   uq.end > 0
+               )
+           GROUP BY u.id
+           ORDER BY u.rating DESC, last_passed_quest
+           ''')
 
     array = []
 
@@ -28,7 +39,7 @@ def list_action(request):
         array.append(u)
 
     return success_response({
-        'count': len(users),
+        'count': len(array),
         'items': array
     })
 
