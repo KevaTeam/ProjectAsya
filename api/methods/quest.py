@@ -128,8 +128,8 @@ def list_quest(request):
 
         q.update({
             'count': quest.count,
-            'author': '',
-            'full_text': q['text']
+            'author': q['author'],
+            'short_text': q['short_text'],
         })
 
         array.append(q)
