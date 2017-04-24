@@ -29,7 +29,10 @@ def handle_quest(request, quest):
     try:
         name = get_param_or_fail(request, 'title')
         category = get_param_or_fail(request, 'section')
-        text = get_param_or_fail(request, 'full_text')
+        author = get_param_or_fail(request, 'author')
+        short_text = get_param_or_fail(request, 'short_text')
+        full_text = get_param_or_fail(request, 'full_text')
+        solution = get_param_or_fail(request, 'solution')
         answer = get_param_or_fail(request, 'answer')
         score = get_param_or_fail(request, 'score')
 
@@ -46,7 +49,10 @@ def handle_quest(request, quest):
         params = {
             'name': name,
             'category': quest_category,
-            'text': text,
+            'author': author,
+            'short_text': short_text,
+            'full_text': full_text,
+            'solution': solution,
             'answer': answer,
             'score': score,
             'tags': tags
@@ -57,7 +63,10 @@ def handle_quest(request, quest):
         else:
             quest.name = name
             quest.category = quest_category
-            quest.text = text
+            quest.author = author
+            quest.short_text = short_text
+            quest.full_text = full_text
+            quest.solution = solution
             quest.answer = answer
             quest.score = score
             quest.tags = tags

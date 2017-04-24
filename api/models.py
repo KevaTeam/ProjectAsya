@@ -73,7 +73,10 @@ class QuestCategory(models.Model):
 
 class Quest(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    text = models.TextField()
+    author = models.CharField(max_length=100)
+    short_text = models.CharField(max_length=255)
+    full_text = models.TextField()
+    solution = models.TextField(blank=True)
     answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
     score = models.IntegerField()
     category = models.ForeignKey(QuestCategory)
@@ -89,7 +92,10 @@ class Quest(models.Model):
         return {
             'id': self.id,
             'title': self.name,
-            'text': self.text,
+            'author': self.author,
+            'short_text': self.short_text,
+            'full_text': self.full_text,
+            'solution': self.solution,
             'section': {
                 'id': self.category.id,
                 'title': self.category.name
