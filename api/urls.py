@@ -23,17 +23,17 @@ urlpatterns = [
         url(r'^check.permission$', check.permission),
 
         url(r'^category.', include([
-            url(r'^add$', category.add),
-            url(r'^list$', category.list),
-            url(r'^edit$', category.edit),
-            url(r'^delete$', category.delete)
+            url(r'^add$', category.add_action),
+            url(r'^list$', category.list_action),
+            url(r'^edit$', category.edit_action),
+            url(r'^delete$', category.delete_action)
         ])),
 
         url(r'^message.', include([
-            url(r'^add$', message.add),
-            url(r'^list$', message.list),
-            url(r'^edit$', message.edit),
-            url(r'^delete$', message.delete)
+            url(r'^add$', message.add_action),
+            url(r'^list$', message.list_action),
+            url(r'^edit$', message.edit_action),
+            url(r'^delete$', message.delete_action)
         ])),
 
         url(r'^timer.', include([

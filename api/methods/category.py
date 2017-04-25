@@ -2,7 +2,8 @@ from api.helpers import success_response
 from api.models import QuestCategory
 from api.helpers import *
 
-def list(request):
+
+def list_action(request):
     if not request.client.log_in:
         return not_logged_response()
 
@@ -13,7 +14,7 @@ def list(request):
     })
 
 
-def add(request):
+def add_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
@@ -31,7 +32,7 @@ def add(request):
 
 
 
-def edit(request):
+def edit_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
@@ -49,7 +50,7 @@ def edit(request):
     return success_response(category.id)
 
 
-def delete(request):
+def delete_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 

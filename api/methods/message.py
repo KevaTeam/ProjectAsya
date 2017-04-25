@@ -7,7 +7,8 @@ MESSAGE_TYPES = {
     'individual': 2
 }
 
-def list(request):
+
+def list_action(request):
     if not request.client.log_in:
         return not_logged_response()
 
@@ -32,7 +33,7 @@ def list(request):
     })
 
 
-def add(request):
+def add_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
     try:
@@ -59,8 +60,7 @@ def add(request):
     return success_response(message.id)
 
 
-
-def edit(request):
+def edit_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
@@ -96,7 +96,7 @@ def edit(request):
     return success_response(message.id)
 
 
-def delete(request):
+def delete_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
