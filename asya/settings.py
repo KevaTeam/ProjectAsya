@@ -129,10 +129,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'frontend/templates/static'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/static/")
-]
+STATIC_ROOT = 'frontend/static'
 
 # Expires time for access token
 TOKEN_EXPIRED_TIME = datetime.timedelta(days=15)
