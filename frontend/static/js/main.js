@@ -339,7 +339,7 @@ $(function() {
             this.update();
         },
         events: {
-            'click a.quest_title': "openModal",
+            'click a.quest_title': "openModal"
         },
 
         update: function() {
@@ -350,8 +350,7 @@ $(function() {
             var quest = _.find(App.cache['quests'], function(num){ return num.id == e.target.id; });
 
             (new App.Models.QuestTake).fetch({ params: { id: quest.id }});
-
-            App.Views.Main.$el.find('.modal-content').html((new Task).render(quest).$el);
+            App.Views.Main.$el.find('.quest-modal .modal-content').html((new Task).render(quest).$el);
         },
         render: function (array) {
             // Sort by rating
@@ -375,8 +374,6 @@ $(function() {
             this.$el.find('.alert').hide();
             var Pass = new App.Models.QuestPass();
             Pass.fetch({params: {id: this.quest.id, answer: this.$el.find('#answer').val() }});
-
-
         },
         render: function(quest) {
             this.quest = quest;
