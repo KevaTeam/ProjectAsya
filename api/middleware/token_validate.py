@@ -1,7 +1,6 @@
+from django.http import HttpResponse
 from api.models import Token
-
 from datetime import datetime
-
 
 class Client():
     log_in = False
@@ -10,6 +9,7 @@ class Client():
     def log_in_by_token(self, token):
         try:
             user = Token.objects.get(token=token, expires__gte=datetime.now())
+
             self.user = user.uid
             self.user_id = user.uid.id
             self.permission = user.scope
@@ -31,6 +31,9 @@ class TokenValidateMiddleware(object):
         self.get_response = get_response
         # One-time configuration and initialization.
 
+    def process_request(self, request):
+        return HttpResponse("in exception")
+
     def __call__(self, request):
         token = request.GET.get('access_token', None) or request.POST.get('access_token', None)
         request.client = Client()
@@ -49,3 +52,6 @@ class TokenValidateMiddleware(object):
         # the view is called.
 
         return response
+
+    def process_exception(self, request, exception):
+        return HttpResponse("exception occured :(")

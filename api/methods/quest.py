@@ -100,6 +100,9 @@ def delete_quest(request):
 
 
 def list_quest(request):
+    if not request.client.log_in:
+        return not_logged_response()
+
     quests = Quest.objects.raw('''
         SELECT
             q.*,
