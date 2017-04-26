@@ -118,7 +118,7 @@ def list_quest(request):
                 q.id = uq2.quest_id AND
                 uq2.end IS NOT NULL
             )
-        GROUP BY q.id''', str(request.client.user_id))
+        GROUP BY q.id''', [int(request.client.user_id)])
 
     array = []
     for quest in quests:
