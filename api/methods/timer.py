@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db.models import Q
 
 from api.models import Config
-from api.helpers import get_param_or_fail, success_response, not_logged_response
+from api.helpers import get_param_or_fail, success_response, failure_response, not_logged_response
 
 
 def get_action(request):
@@ -34,8 +34,11 @@ def set_action(request):
 
     time_start = get_param_or_fail(request, 'start')
     time_end = get_param_or_fail(request, 'end')
+    format = '%d-%m-%Y %H:%M:%S'
 
-    print(time_start, time_end)
+    if datetime.strptime(time_start, format) > datetime.strptime(time_end, format):
+        return failure_response('The beginning of the game must be before its end')
+
     try:
         start = Config.objects.get(key='start')
         end = Config.objects.get(key='end')

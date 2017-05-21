@@ -3,8 +3,6 @@
  */
 
 $(function() {
-    Backbone.history.navigate('', {trigger: true});
-
     var App = {
         config: {
             urlAPI: "/api/method/",
@@ -33,34 +31,54 @@ $(function() {
     function clearCookie() {
         $.cookie('token', '');
         $.cookie('user_id', '');
+        $.cookie('isAdmin', '');
+    }
+    
+    function isUserLogin() {
+        return !!$.cookie('token') && !!$.cookie('user_id');
     }
 
     App.Router = Backbone.Router.extend({
         routes: {
-            "login":  "login",
-            'tasks':  "tasks",
-            "timer":  "timer",
-            "logout": "logout",
-            "end":    "end",
-            "":       "timer"
+            '':       'timer',
+            'login':  'login',
+            'timer':  'timer',
+            'tasks':  'tasks',
+            'logout': 'logout',
+            'end':    'end'
         },
 
         initialize: function() {
             App.Views.Main = new App.Views.Wrapper();
+            console.log('Router initialize');
             Backbone.history.start();
+        },
+
+        execute: function (callback, args, name) {
+            console.info('Working route %s', name);
+
+            // Проверим вошел ли пользователь
+            if (!isUserLogin() && name !== 'login') {
+                console.warn('User is not log in');
+                this.login();
+                return;
+            }
+
+            if (callback) callback.apply(this, args);
         },
 
         login: function() {
             clearCookie();
-            console.log('login');
             new App.Views.Login();
         },
 
         tasks: function () {
+            console.log('Router: tasks');
             new App.Views.Tasks();
         },
 
         timer: function () {
+            console.log('Router: timer');
             if(App.cache.views.timer === undefined) {
                 App.cache.views.timer = new App.Views.Timer();
             }
@@ -173,8 +191,6 @@ $(function() {
             console.log('Timer: set time');
             console.log(this, time);
             this.time = time;
-        // },
-
 
             this.trigger('render');
 
@@ -213,11 +229,10 @@ $(function() {
 
                 Backbone.history.navigate('tasks', {trigger: true});
 
-                console.log('start end timer');
                 App.cache['timerEnd'] = setInterval(function () {
                     App.cache['timerTimestamp'] --;
 
-                    self.updateTime(App.cache['timerTimestamp'], $('#timerEnd'));
+                    self.updateTime(App.cache['timerTimestamp'], $('#timer'));
 
                     // Делаем таймер тру
                     if(App.cache['timerTimestamp'] < 3600) {
@@ -291,7 +306,7 @@ $(function() {
         id: "tasks",
 
         initialize: function() {
-
+            console.log('Initialize tasks');
             this.render();
             new App.Views.UserList({ el: this.$el.find('#users') });
 
@@ -676,16 +691,6 @@ $(function() {
     });
 
     new App.Router();
-    // Проверим вошел ли пользователь
-    if (!$.cookie('token') || !$.cookie('user_id')) {
-        Backbone.history.navigate('login', {trigger: true});
-    }
-    else {
-        console.log('navigate timer');
-        // А соревнования начались???
-        Backbone.history.navigate('timer');
-    }
-
 
     App.Events.on('start_game', function() {
         // Выключаем старый таймер

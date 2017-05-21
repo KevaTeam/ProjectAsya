@@ -77,9 +77,10 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             for (var index in fields) {
                 this.$el.find('.config__datetime-' + fields[index]).datetimepicker({
                     locale: 'ru',
-                    format: "DD-MM-YYYY HH:mm:ss",
-                    defaultDate: moment(model.get(fields[index]).date)
+                    format: "DD-MM-YYYY HH:mm:ss"
                 });
+
+                this.$el.find('.config__datetime-' + fields[index]).data("DateTimePicker").date(moment(model.get(fields[index]).date));
             }
         },
 

@@ -38,8 +38,9 @@ def success_response(data):
 
 
 def not_logged_response():
-    return failure_response({
+    return JsonResponse({
         'error': {
-            'description': 'You are not logged'
+            'description': 'You are not logged',
+            'code': 1
         }
     })

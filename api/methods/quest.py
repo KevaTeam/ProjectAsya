@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, time
 from django.db.models import Sum
 from django.db import IntegrityError
-from api.models import Quest, QuestCategory, UserQuest, Attempt
+from api.models import Quest, QuestCategory, UserQuest, Attempt, Config
 from api.helpers import *
 
 
@@ -179,15 +179,23 @@ def pass_answer(request):
             user=request.client.user,
             quest=quest
         )
+
+        end_game_time = Config.objects.filter(key='end')
     except Quest.DoesNotExist:
         return failure_response('Quest is not found')
     except UserQuest.DoesNotExist:
         return failure_response('You are not take this quest')
+    except Config.DoesNotExist:
+        return failure_response('End time is not defined')
     except Exception as e:
         return failure_response(e.args[0])
 
     if user_quest.end:
         return success_response(answer.lower() == quest.answer.lower())
+
+    now = time.time()
+
+    game_is_ended = now > end_game_time.value
 
     try:
         attempt = Attempt(
@@ -204,7 +212,7 @@ def pass_answer(request):
 
     decision = answer.lower() == quest.answer.lower()
 
-    if decision:
+    if decision and not game_is_ended:
         user_quest.end = datetime.now()
 
         user_quest.save()
@@ -227,7 +235,7 @@ def get_attempts(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
-    attempts = Attempt.objects.all().order_by('time')
+    attempts = Attempt.objects.all().order_by('time')[:100]
 
     array = []
     for attempt in attempts:
