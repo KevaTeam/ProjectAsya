@@ -73,8 +73,23 @@ $(function() {
         },
 
         tasks: function () {
+            var timer = App.cache.views.timer;
+            if (!timer || timer.gameIsWaiting()) {
+                console.log('Redirect to timer');
+                Backbone.history.navigate('timer', { trigger: true });
+                return true;
+            }
+
+            if (timer.gameIsEnded()) {
+                console.log('The game is ended - redirect');
+                Backbone.history.navigate('end', { trigger: true });
+                return true;
+            }
+
             console.log('Router: tasks');
-            new App.Views.Tasks();
+            if (timer.gameIsRunning()) {
+                new App.Views.Tasks();
+            }
         },
 
         timer: function () {
@@ -157,13 +172,26 @@ $(function() {
             this.init();
         },
 
+        gameIsRunning: function () {
+            return this.time.get('start') === 0 && this.time.get('end') > 0;
+        },
+
+        gameIsEnded: function () {
+            return this.time.get('end') === 0;
+        },
+
+        gameIsWaiting: function () {
+            return this.time.get('start') > 0;
+        },
+
         timer: {
             seconds: '',
             minutes: '',
             hours: ''
         },
 
-        init: function() {
+        init: function () {
+
             var Timer = new App.Models.Timer();
 
             this.listenTo(Timer, "change", this.setTime);
@@ -280,7 +308,7 @@ $(function() {
         }
     });
 
-    App.Models.Timer = Backbone.Model.extend({
+    App.Models.Timer = Backbone.Model.extend(   {
         url: 'timer.get',
         default_time: {
             start: 0,
