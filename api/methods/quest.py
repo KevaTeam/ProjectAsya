@@ -235,7 +235,7 @@ def get_attempts(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
-    attempts = Attempt.objects.all().order_by('time')[:100]
+    attempts = Attempt.objects.all().order_by('-time')[:100]
 
     array = []
     for attempt in attempts:
