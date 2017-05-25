@@ -193,9 +193,8 @@ def pass_answer(request):
     if user_quest.end:
         return success_response(answer.lower() == quest.answer.lower())
 
-    now = time()
-
-    game_is_ended = now > end_game_time.value
+    now = datetime.now()
+    game_is_ended = now > datetime.strptime(end_game_time[0].value, '%d-%m-%Y %H:%M:%S')
 
     try:
         attempt = Attempt(
