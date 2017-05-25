@@ -193,7 +193,7 @@ def pass_answer(request):
     if user_quest.end:
         return success_response(answer.lower() == quest.answer.lower())
 
-    now = time.time()
+    now = time()
 
     game_is_ended = now > end_game_time.value
 
