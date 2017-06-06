@@ -40,7 +40,7 @@ class User(models.Model):
     rating = models.IntegerField(default=0)
     password = models.CharField(max_length=255)
 
-    team = models.ForeignKey(Team)
+    team = models.ForeignKey(Team, null=True)
 
     USER_ROLE = (
         (1, 'User'),
