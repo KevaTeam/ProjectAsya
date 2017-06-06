@@ -6,19 +6,6 @@
 	body {
 		background: url('https://pacdn.500px.org/5046/e1a4004def680446f36ece11d5a6111676649b7a/cover_2048.jpg?12');
 	}
-	.form-signin {
-		text-align: center;
-	}
-
-	.border {
-		margin: 10px 0;
-		border-bottom: 1px solid #ccc;
-	}
-
-	.login-bar {
-		padding-top: 150px;
-		background: #fff;
-	}
 </style>
 <div class="row">
 	<div class="col-md-4 login-bar">
@@ -40,6 +27,9 @@
 			    <button class="btn btn-success" type="button" id="submit">Войти</button> <br />
 			    <div class="border"></div>
 			    <button class="btn btn-primary" type="button" id="button-signup">У меня нет аккаунта</button>
+			    <button type="button" class="btn btn-default login-bar__scoreboard">
+                  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Таблица результатов
+                </button>
 		    </div>
 		    <div class="form-signup form" style="display: none;" data-type="signup">
 			    <h2 class="form-signin-heading">Регистрация</h2>
@@ -60,8 +50,15 @@
 			    	<label for="inputPassword" class="sr-only">Пароль</label>
 			    	<input type="password" id="inputSignupPassword" class="form-control" placeholder="Введите пароль" value="" name="inputSignupPassword">
 			    </div>
-			    
 
+                <div class="form-group">
+			    	<div class="input-group">
+                        <input type="password" id="inputSignupToken" class="form-control" placeholder="Введите токен" value="" name="inputSignupToken">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Нет токена</button>
+                        </div>
+                    </div>
+                </div>
 			    <button class="btn btn-primary" id="submit" type="button">Зарегистрироваться</button> <br />
 			    <div class="border"></div>
 			    <button class="btn btn-success" type="button" id="button-login">Назад ко входу</button>
@@ -70,8 +67,15 @@
 		 
 
 	</div>
-	<div class="col-md-8">
-		
+	<div class="col-md-8 scoreboard">
+		<h1 class="text-center">Таблица результатов</h1>
+		<table class="table table-hover">
+		<tbody class="results">
+		    <tr>
+		        <th scope=row>1</th>
+		        <td>Mark</td> <td>Otto</td>
+		         <td>@mdo</td> </tr>
+		         <tr> <th scope=row>2</th> <td>Jacob</td> <td>Thornton</td> <td>@fat</td> </tr> <tr> <th scope=row>3</th> <td>Larry</td> <td>the Bird</td> <td>@twitter</td> </tr> </tbody> </table>
 	</div>
 </div>
 

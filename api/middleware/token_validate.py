@@ -20,7 +20,6 @@ class Client():
             return False
 
     def is_admin(self):
-        print(self.permission)
         return self.log_in and self.permission == 2
 
     def is_user(self):

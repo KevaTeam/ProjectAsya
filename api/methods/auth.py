@@ -1,10 +1,11 @@
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.utils import IntegrityError
-from api.models import User, Token
+from api.models import User, Token, Team
 from api.helpers import (
     get_param_or_fail, failure_response, get_client_ip,
     success_response
 )
+from asya.settings import REGISTRATION_OPENED
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
@@ -26,7 +27,6 @@ def auth(request):
         return failure_response('The user with same username or password does not exists')
 
     ip = get_client_ip(request)
-    print(user)
 
     token = Token()
 
@@ -43,6 +43,9 @@ def auth(request):
 
 def signup(request):
     try:
+        if not REGISTRATION_OPENED:
+            return failure_response('Registration is closed')
+
         username = get_param_or_fail(request, 'username')
         password = get_param_or_fail(request, 'password')
         mail = request.GET.get('mail', 'undefined' + str(time.time()) + '@example.com')
@@ -64,11 +67,20 @@ def signup(request):
         count_user = User.objects.all().count()
         user_role = 2 if count_user == 0 else 1
 
+        team = Team(
+            name=username+' team',
+            score=0,
+            token=str(time.time())
+        )
+
+        team.save()
+
         user = User(
             name=username,
             mail=mail,
             password=password,
-            role=user_role
+            role=user_role,
+            team=team
         )
 
         user.save()

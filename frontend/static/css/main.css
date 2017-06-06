@@ -6,11 +6,32 @@ body {
     width: 100%;
 }
 
+
 /* Signup */
+.border {
+    margin: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.login-bar {
+    background: #fff;
+}
+
+    .login-bar .login-bar__scoreboard {
+        margin-top: 20px;
+    }
+
+.scoreboard {
+    display: none;
+    background: #fff;
+}
+
 .form-signin {
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
+    margin-top: 150px;
+    text-align: center;
 }
 
 .form-signin .form-signin-heading,
@@ -32,6 +53,10 @@ body {
     font-size: 16px;
 }
 
+.form-signin .input-group .btn {
+    padding: 11px;
+    margin-top: -10px;
+}
 .form-signin .form-control:focus {
     z-index: 2;
 }

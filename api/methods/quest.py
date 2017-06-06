@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from django.db.models import Sum
 from django.db import IntegrityError
-from api.models import Quest, QuestCategory, UserQuest, Attempt, Config
+from api.models import Quest, QuestCategory, UserQuest, Attempt, Config, Team
 from api.helpers import *
 
 
@@ -103,6 +103,20 @@ def list_quest(request):
     if not request.client.log_in:
         return not_logged_response()
 
+    try:
+        now = datetime.now()
+        start_game_time = Config.objects.get(key='start')
+
+        if now < start_game_time[0].as_datetime():
+            return failure_response("Game is not started")
+
+        end_game_time = Config.objects.get(key='end')
+
+        game_is_ended = now > end_game_time[0].as_datetime()
+    except Config.DoesNotExist:
+        game_is_ended = False
+        end_game_time = False
+
     quests = Quest.objects.raw('''
         SELECT
             q.*,
@@ -111,14 +125,14 @@ def list_quest(request):
         FROM api_quest AS q
             LEFT JOIN api_userquest AS uq1 ON (
                 q.id = uq1.quest_id AND
-                uq1.user_id = %s AND
+                uq1.user_id IN (SELECT id FROM api_user WHERE team_id = %s) AND
                 uq1.end > 0
             )
             LEFT JOIN api_userquest AS uq2 ON (
                 q.id = uq2.quest_id AND
                 uq2.end IS NOT NULL
             )
-        GROUP BY q.id''', [int(request.client.user_id)])
+        GROUP BY q.id''', [int(request.client.user.team_id)])
 
     array = []
     for quest in quests:
@@ -129,10 +143,15 @@ def list_quest(request):
                 'answer': quest.answer
             })
 
+        if game_is_ended:
+            q.update({
+                'solution': quest.solution
+            })
+
         q.update({
             'count': quest.count,
             'author': q['author'],
-            'short_text': q['short_text'],
+            'short_text': q['short_text']
         })
 
         array.append(q)
@@ -144,10 +163,21 @@ def list_quest(request):
 
 
 def take_quest(request):
+    if not request.client.log_in:
+        return not_logged_response()
+
     try:
+        now = datetime.now()
+        start_game_time = Config.objects.get(key='start')
+
+        if now < start_game_time[0].as_datetime():
+            return failure_response("Game is not started")
+
         id = get_param_or_fail(request, 'id')
 
         quest = Quest.objects.get(id=id)
+    except Config.DoesNotExist:
+        return failure_response('Start game is not defined')
     except Quest.DoesNotExist:
         return failure_response('Quest is not found')
     except Exception as e:
@@ -169,6 +199,9 @@ def take_quest(request):
 
 
 def pass_answer(request):
+    if not request.client.log_in:
+        return not_logged_response()
+
     try:
         id = get_param_or_fail(request, 'id')
         answer = get_param_or_fail(request, 'answer')
@@ -180,7 +213,7 @@ def pass_answer(request):
             quest=quest
         )
 
-        end_game_time = Config.objects.filter(key='end')
+        end_game_time = Config.objects.get(key='end')
     except Quest.DoesNotExist:
         return failure_response('Quest is not found')
     except UserQuest.DoesNotExist:
@@ -194,7 +227,7 @@ def pass_answer(request):
         return success_response(answer.lower() == quest.answer.lower())
 
     now = datetime.now()
-    game_is_ended = now > datetime.strptime(end_game_time[0].value, '%d-%m-%Y %H:%M:%S')
+    game_is_ended = now > end_game_time[0].as_datetime()
 
     try:
         attempt = Attempt(
@@ -222,10 +255,28 @@ def pass_answer(request):
             .exclude(end__isnull=True)\
             .aggregate(total_rating=Sum('quest__score'))
 
-        rating = rating['total_rating'] or 0
-
-        request.client.user.rating = rating
+        # Пишем рейтинг пользователю
+        request.client.user.rating = rating['total_rating'] or 0
         request.client.user.save()
+
+        rating = Team.objects.raw('''
+           SELECT
+              MAX(R.quest) AS id,
+              SUM(R.score) AS score
+           FROM (SELECT
+               UQ.quest_id AS quest,
+               Q.score AS score
+           FROM api_userquest AS UQ
+           INNER JOIN api_quest AS Q ON UQ.quest_id = Q.id
+           WHERE
+               UQ.user_id IN (SELECT U.id FROM api_user AS U WHERE U.team_id = %s) AND
+               UQ.end > 0
+           GROUP BY quest_id) AS R;
+        ''', [int(request.client.user.team_id)])
+
+        # Обновляем командный рейтинг
+        request.client.user.team.score = rating[0].score
+        request.client.user.team.save()
 
     return success_response(decision)
 
@@ -241,3 +292,17 @@ def get_attempts(request):
         array.append(attempt.to_list())
 
     return success_response(array)
+
+
+def upload_action(request):
+    if request.method != 'POST':
+        return failure_response("Allowed only POST parameters")
+
+    if not request.client.is_admin():
+        return failure_response("You don't have sufficient permissions")
+
+    print(request.FILES['archive'])
+    # archive = request.FILES['archive']
+
+
+    return success_response('1')

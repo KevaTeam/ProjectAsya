@@ -6,7 +6,8 @@ from .methods import (
     message as message,
     timer as timer,
     user as user,
-    quest as quest
+    quest as quest,
+    rating as rating
 )
 
 from . import views
@@ -56,7 +57,12 @@ urlpatterns = [
             url(r'^create$', quest.create_quest),
             url(r'^save$', quest.edit_quest),
             url(r'^delete$', quest.delete_quest),
-            url(r'^attempts$', quest.get_attempts)
+            url(r'^attempts$', quest.get_attempts),
+            url(r'^upload$', quest.upload_action)
+        ])),
+
+        url(r'^rating.', include([
+            url(r'^list$', rating.list_action),
         ]))
     ]))
 ]

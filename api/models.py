@@ -8,6 +8,19 @@ import string
 QUEST_ANSWER_LENGTH = 255
 
 
+class Team(models.Model):
+    name = models.CharField(
+        max_length=30,
+        unique=True,
+        error_messages={
+            'unique': 'The team with same name is already exists'
+        }
+    )
+
+    token = models.CharField(max_length=255)
+    score = models.IntegerField(default=0)
+
+
 class User(models.Model):
     name = models.CharField(
         "name",
@@ -26,6 +39,8 @@ class User(models.Model):
     # last_activity = models.DateTimeField('Date of last activity')
     rating = models.IntegerField(default=0)
     password = models.CharField(max_length=255)
+
+    team = models.ForeignKey(Team)
 
     USER_ROLE = (
         (1, 'User'),
@@ -95,7 +110,6 @@ class Quest(models.Model):
             'author': self.author,
             'short_text': self.short_text,
             'full_text': self.full_text,
-            'solution': self.solution,
             'section': {
                 'id': self.category.id,
                 'title': self.category.name
@@ -188,3 +202,11 @@ class Message(models.Model):
 class Config(models.Model):
     key = models.CharField(max_length=32, blank=False)
     value = models.CharField(max_length=255, blank=False)
+
+    def as_datetime(self):
+        try:
+            d = datetime.strptime(self.value, '%d-%m-%Y %H:%M:%S')
+        except ValueError:
+            d = False
+
+        return d

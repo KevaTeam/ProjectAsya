@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'v(bq8doff7dfte1gj%qcp=15bx5wg(bt!z=xsnd^x8+siwc6c9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -137,6 +137,8 @@ STATICFILES_DIRS = [
 
 # Expires time for access token
 TOKEN_EXPIRED_TIME = datetime.timedelta(days=15)
+
+REGISTRATION_OPENED = True
 
 try:
     from asya.parameters import *

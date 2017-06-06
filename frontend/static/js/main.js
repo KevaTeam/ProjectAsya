@@ -477,7 +477,7 @@ $(function() {
 
     App.Collections.Users = Backbone.Collection.extend({
         model: App.Models.User,
-        url: 'user.list',
+        url: 'rating.list',
         parse: function(response) {
             return {
                 response: response.items
@@ -611,7 +611,6 @@ $(function() {
         }
     });
 
-
     App.Views.Login = Backbone.View.extend({
         id: 'container',
 
@@ -619,7 +618,8 @@ $(function() {
             'keypress .form-signin input': 'updateOnEnter',
             'click button#submit': "submit",
             'click button#button-signup': 'signupForm',
-            'click button#button-login': 'loginForm'
+            'click button#button-login': 'loginForm',
+            'click button.login-bar__scoreboard': 'showRating'
         },
 
         initialize: function () {
@@ -701,6 +701,39 @@ $(function() {
             var type = $(e.target).closest('.form').data('type');
 
             return type == 'login' ? this.submitLogin() : this.submitSignup();
+        },
+
+        showRating: function () {
+            var self = this,
+                el = self.$el.find('.scoreboard');
+
+            this.collection = new App.Collections.Users();
+
+            this.listenTo(this.collection, "add", function (array) {
+                el.find('.results').html(new EJS({url: '/static/templates/rating/ListItem.ejs'}).render({
+                    myRole: App.cache.role,
+                    user: array.attributes.response
+                }));
+            });
+
+            this.collection.fetch({ params: { order: 'rating' }});
+
+            setInterval(function () {
+                self.collection.fetch({ params: { order: 'rating' }});
+            }, 5000);
+            $( ".login-bar" ).animate({
+                opacity: 0
+            }, 500, function() {
+                console.log('ok');
+                el.show();
+                el.css("position","absolute");
+                el.css("top", Math.max(0, (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop()) + "px");
+                el.css("left", Math.max(0, (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft()) + "px");
+
+                return true;
+            });
+
+            
         },
 
         updateOnEnter: function(e) {
