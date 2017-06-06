@@ -140,7 +140,8 @@ def list_quest(request):
 
         if request.client.is_admin():
             q.update({
-                'answer': quest.answer
+                'answer': quest.answer,
+                'solution': quest.solution
             })
 
         if game_is_ended:
