@@ -107,12 +107,12 @@ def list_quest(request):
         now = datetime.now()
         start_game_time = Config.objects.get(key='start')
 
-        if now < start_game_time[0].as_datetime():
+        if now < start_game_time.as_datetime():
             return failure_response("Game is not started")
 
         end_game_time = Config.objects.get(key='end')
 
-        game_is_ended = now > end_game_time[0].as_datetime()
+        game_is_ended = now > end_game_time.as_datetime()
     except Config.DoesNotExist:
         game_is_ended = False
         end_game_time = False
@@ -171,7 +171,7 @@ def take_quest(request):
         now = datetime.now()
         start_game_time = Config.objects.get(key='start')
 
-        if now < start_game_time[0].as_datetime():
+        if now < start_game_time.as_datetime():
             return failure_response("Game is not started")
 
         id = get_param_or_fail(request, 'id')
@@ -228,7 +228,7 @@ def pass_answer(request):
         return success_response(answer.lower() == quest.answer.lower())
 
     now = datetime.now()
-    game_is_ended = now > end_game_time[0].as_datetime()
+    game_is_ended = now > end_game_time.as_datetime()
 
     try:
         attempt = Attempt(
