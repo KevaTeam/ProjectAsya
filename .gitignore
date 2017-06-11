@@ -5,6 +5,8 @@ __pycache__/
 frontend/static/admin/*
 frontend/static/node_modules/*
 
+static/*
+
 # Configs
 asya/parameters.py
 
