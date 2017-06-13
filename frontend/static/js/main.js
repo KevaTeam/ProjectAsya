@@ -619,6 +619,7 @@ $(function() {
             'click button#submit': "submit",
             'click button#button-signup': 'signupForm',
             'click button#button-login': 'loginForm',
+            'click button#button-token': 'toggleToken',
             'click button.login-bar__scoreboard': 'showRating'
         },
 
@@ -641,12 +642,29 @@ $(function() {
             this.$el.find('.form-signup').hide();
         },
 
+        toggleToken: function () {
+            var form_token = this.$el.find('.form-token'),
+                form_team = this.$el.find('.form-team');
+
+            console.log(form_token, form_team);
+            if (form_token.hasClass('hidden')) {
+                form_team.addClass('hidden');
+                form_token.removeClass('hidden');
+            }
+            else {
+                form_token.addClass('hidden');
+                form_team.removeClass('hidden');
+            }
+        },
+
         submitSignup: function() {
             var signup = new App.Models.Signup;
             var params = {
                 mail: this.$el.find('#inputSignupEmail').val(),
                 username: this.$el.find('#inputSignupLogin').val(),
-                password: this.$el.find('#inputSignupPassword').val()
+                password: this.$el.find('#inputSignupPassword').val(),
+                token: this.$el.find('#inputSignupToken').val(),
+                team: this.$el.find('#inputSignupTeamName').val()
             };
             console.log(params);
             if (params.username == "") {
@@ -739,6 +757,7 @@ $(function() {
         updateOnEnter: function(e) {
             if (e.keyCode == 13) this.submit(e);
         },
+
         message: function(text) {
             console.log(text);
             this.$el.find('.message').show().html(text);

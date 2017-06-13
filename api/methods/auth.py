@@ -10,6 +10,8 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
 import time
+import random
+import string
 
 def auth(request):
     try:
@@ -49,6 +51,8 @@ def signup(request):
         username = get_param_or_fail(request, 'username')
         password = get_param_or_fail(request, 'password')
         mail = request.GET.get('mail', 'undefined' + str(time.time()) + '@example.com')
+        team_name = request.GET.get('team', username+' team')
+        token = request.GET.get('token', '')
 
         validate_email(mail)
 
@@ -67,13 +71,19 @@ def signup(request):
         count_user = User.objects.all().count()
         user_role = 2 if count_user == 0 else 1
 
-        team = Team(
-            name=username+' team',
-            score=0,
-            token=str(time.time())
-        )
+        if token:
+            try:
+                team = Team.objects.get(token=token)
+            except Team.DoesNotExist:
+                return failure_response('Team with this token is not exists')
+        else:
+            team = Team(
+                name=team_name,
+                score=0,
+                token=''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(10))
+            )
 
-        team.save()
+            team.save()
 
         user = User(
             name=username,

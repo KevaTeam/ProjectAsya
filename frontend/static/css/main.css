@@ -73,6 +73,10 @@ body {
     border-top-right-radius: 0;
 }
 
+.form-signin .form-token input, .form-signin .form-team input {
+    margin-bottom: 10px;
+}
+
 /* End signup */
 
 /* Timer */
