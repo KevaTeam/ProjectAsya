@@ -77,6 +77,10 @@ def signup(request):
             except Team.DoesNotExist:
                 return failure_response('Team with this token is not exists')
         else:
+            team = Team.objects.filter(name=team_name)
+            if team:
+                return failure_response('Team with this name is already exists')
+
             team = Team(
                 name=team_name,
                 score=0,
