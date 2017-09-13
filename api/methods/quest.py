@@ -107,7 +107,7 @@ def list_quest(request):
         now = datetime.now()
         start_game_time = Config.objects.get(key='start')
 
-        if now < start_game_time.as_datetime():
+        if now < start_game_time.as_datetime() and not request.client.is_admin():
             return failure_response("Game is not started")
 
         end_game_time = Config.objects.get(key='end')
