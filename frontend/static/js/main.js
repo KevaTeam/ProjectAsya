@@ -340,8 +340,6 @@ $(function() {
 
             new App.Views.QuestList({ el: this.$el.find('#quest') });
 
-            this.$el.find('.help').html(new EJS({url: '/static/templates/quest/Help.ejs'}).render());
-
             App.Views.Main.render(this.$el);
         },
         render: function() {
