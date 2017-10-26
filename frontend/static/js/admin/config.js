@@ -124,7 +124,7 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             var self = this;
 
             wrapper.updateMenu('config');
-            wrapper.renderPage(this.template);
+            wrapper.renderPage(this.template.replace('<% token %>', $.cookie('token')));
 
             var date = new dateView();
             this.$el.find('.config__date').append(date.render().el);

@@ -3,7 +3,14 @@ from django.db.models import Sum
 from django.db import IntegrityError
 from api.models import Quest, QuestCategory, UserQuest, Attempt, Config, Team
 from api.helpers import *
+from random import choice
+from string import ascii_uppercase
 
+from zipfile import *
+
+import os
+import json
+import requests
 
 def create_quest(request):
     if not request.client.is_admin():
@@ -296,14 +303,85 @@ def get_attempts(request):
 
 
 def upload_action(request):
+    print(request)
     if request.method != 'POST':
         return failure_response("Allowed only POST parameters")
 
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
-    print(request.FILES['archive'])
+    file = request.FILES['archive']
+
+    tmp_file_name = ''.join(choice(ascii_uppercase) for i in range(12))
+    tmp_file_path = '/tmp/' + tmp_file_name
+
+    with open(tmp_file_path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    if not is_zipfile(tmp_file_path):
+        os.remove(tmp_file_path)
+        return failure_response("Allowed only zip archives")
+
+    zip = ZipFile(tmp_file_path, 'r')
+
+    path = '/tmp/folder/'
+    zip.extractall(path)
+
+    categories = QuestCategory.objects.all()
+    cats = {}
+    for c in categories:
+        cats[c.name.lower()] = c.id
+
+    for task in os.listdir(path):
+        if os.path.isfile(path + task):
+            continue
+
+        PATH = path + task + '/main.json'
+        if not os.path.isfile(PATH):
+            continue
+
+        file = open(PATH, 'r')
+        json_file = file.read()
+        l = json.loads(json_file)
+
+        if l['category'] and l['category'].lower() not in cats:
+            category_name = l['category'].lower()
+            category = QuestCategory(name=category_name)
+            category.save()
+
+            cats[category_name] = category.id
+
+        if type(l['description']) == str:
+            full_text = l['description']
+        else:
+            full_text = l['description']['RU']
+
+        if 'links' in l and type(l['links']) == list and len(l['links']) > 0:
+            description = l['description']['RU'] if 'RU' in l['description'] else l['description']
+            full_text = description + '</br> <a href="' + l['links'][0].popitem()[1] + '">Вложение</a>'
+
+        file = open(path + task + '/solve.md', 'r', encoding='utf-8')
+        solution = file.read()
+        payload = {
+            'id': 0,
+            'title': l['name'],
+            'section': cats[l['category'].lower()],
+            'score': l['value'],
+            'answer': l['flag_key'],
+            'author': l['author']['nick'] if 'nick' in l['author'] else 'undefined',
+            'short_text': full_text,
+            'full_text': full_text,
+            'tags': l['category'],
+            'solution': solution,
+            'access_token': request.GET.get('access_token', None)
+        }
+        # print(payload)
+        r = requests.post('http://localhost/api/method/quest.create', data=payload)
+
+        print(r.text)
     # archive = request.FILES['archive']
 
+    os.remove(tmp_file_path)
 
     return success_response('1')

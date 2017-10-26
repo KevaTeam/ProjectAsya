@@ -1,3 +1,4 @@
 uwsgi
 django
-mysqlclient	
+mysqlclient
+requests

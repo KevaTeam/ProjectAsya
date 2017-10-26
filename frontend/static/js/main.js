@@ -655,6 +655,10 @@ $(function() {
             }
         },
 
+        disableInput: function () {
+            console.log(this.$el.find('input').attr('disabled','disabled'));
+        },
+
         submitSignup: function() {
             var signup = new App.Models.Signup;
             var params = {
@@ -664,6 +668,9 @@ $(function() {
                 token: this.$el.find('#inputSignupToken').val(),
                 team: this.$el.find('#inputSignupTeamName').val()
             };
+
+            this.disableInput();
+
             console.log(params);
             if (params.username == "") {
                 this.message("Не введен логин");

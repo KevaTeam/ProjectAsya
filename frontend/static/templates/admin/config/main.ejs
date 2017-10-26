@@ -10,9 +10,11 @@
                     <button type="button" class="btn btn-primary submit-flags">Скачать backup</button>
                 </div>
                 <div class="col-md-8">
-                    <h4>Загрузить</h4>
-                    <input type="file" id="backup_file" style="display: inline-block;"/>
-                    <button type="button" class="btn btn-primary submit-flags">Загрузить backup</button>
+                    <form action="/api/method/quest.upload?access_token=<% token %>" enctype="multipart/form-data" method="POST">
+                        <h4>Загрузить</h4>
+                        <input type="file" id="backup_file" name="archive" style="display: inline-block;"/>
+                        <button type="submit" class="btn btn-primary submit-flags">Загрузить backup</button>
+                    </form>
                 </div>
             </div>
         </div>
