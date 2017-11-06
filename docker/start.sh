@@ -6,7 +6,7 @@ echo "Start mysql server"
 
 mkdir -p /var/run/mysqld
 chown mysql:mysql /var/run/mysqld
-/usr/bin/mysqld_safe & sleep 5s
+service mysql start
 
 # Set password
 MYSQL_ROOT_PASSWORD=`pwgen -c -n -1 12`
