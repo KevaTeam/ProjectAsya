@@ -1,0 +1,27 @@
+version: '2'
+services:
+    backend:
+        build: ./platform
+        container_name: "platform"
+        user: root
+        ports:
+            - "80:80"
+        links:
+            - database
+        depends_on:
+            - database
+        environment:
+            DB_PASSWORD: 123456
+        volumes:
+            - ../logs:/var/log/nginx
+            - ../platform:/app/platform
+
+    database:
+        image: mysql:latest
+        container_name: "database"
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: asya
+        volumes:
+            - ../db:/var/lib/mysql

@@ -2,13 +2,16 @@
 __pycache__/
 *.pyc
 
-frontend/static/admin/*
-frontend/static/node_modules/*
+platform/frontend/static/admin/*
+platform/frontend/static/node_modules/*
 
-static/*
+platform/static/*
 
 # Configs
-asya/parameters.py
+platform/asya/parameters.py
 
 # Не храним базы данных
 db.sqlite3
+
+db/*
+logs/*
