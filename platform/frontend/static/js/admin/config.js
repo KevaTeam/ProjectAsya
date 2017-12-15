@@ -116,8 +116,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
         template: new EJS({url: '/static/templates/admin/config/main.ejs'}).text,
 
         destructTimer: function () {
-            clearInterval(this.currentTime.timer);
-            clearInterval(this.updateTimeTimer);
+            clearInterval(this.date.currentTime.timer);
+            clearInterval(this.date.updateTimeTimer);
         },
 
         initialize: function () {
@@ -126,8 +126,8 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'moment', 'datetimepicker
             wrapper.updateMenu('config');
             wrapper.renderPage(this.template.replace('<% token %>', $.cookie('token')));
 
-            var date = new dateView();
-            this.$el.find('.config__date').append(date.render().el);
+            this.date = new dateView();
+            this.$el.find('.config__date').append(this.date.render().el);
 
             App.Events.on('page:update', this.destructTimer, this);
 
