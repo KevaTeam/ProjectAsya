@@ -1,0 +1,13 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'asya',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'database',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        }
+    }
+}

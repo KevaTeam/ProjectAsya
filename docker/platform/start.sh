@@ -2,6 +2,8 @@
 
 pip3 install -r /app/platform/requirements.txt
 
+cp /app/platform/asya/parameters.py.sample /app/platform/asya/parameters.py
+
 # Django делает миграции на сервер БД
 python3 /app/platform/manage.py makemigrations --noinput
 python3 /app/platform/manage.py makemigrations api

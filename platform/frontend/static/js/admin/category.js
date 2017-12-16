@@ -100,7 +100,6 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             this.listenTo(this.collections.Categories, 'add', this.addOneCategory);
             this.listenTo(this.collections.Categories, 'change', this.updateElement);
 
-
             App.Events.on('category:block:edit:show', this.showForm, this);
             App.Events.on('category:modal:confirm:show', this.showDeleteWindow, this);
             App.Events.on('category:form:parse', this.formParse, this);
@@ -151,10 +150,6 @@ define(['jquery', 'underscore', 'backbone', 'wrapper', 'bootstrap'], function($,
             this.listenTo(model, 'error', function(response) {
                 App.Events.trigger('category:form:message:show', response.message);
             });
-        },
-
-        addOneSection: function(model) {
-            this.sections.push(model.toJSON());
         },
 
         showDeleteWindow: function(questId) {
