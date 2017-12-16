@@ -40,7 +40,7 @@ class User(models.Model):
     rating = models.IntegerField(default=0)
     password = models.CharField(max_length=255)
 
-    team = models.ForeignKey(Team, null=True, on_delete=models.DO_NOTHING)
+    team = models.ForeignKey(Team, null=True, on_delete=models.CASCADE)
 
     USER_ROLE = (
         (1, 'User'),
@@ -94,7 +94,7 @@ class Quest(models.Model):
     solution = models.TextField(blank=True)
     answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
     score = models.IntegerField()
-    category = models.ForeignKey(QuestCategory, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(QuestCategory, on_delete=models.CASCADE)
     tags = models.TextField(blank=True)
 
     def __str__(self):
@@ -121,8 +121,8 @@ class Quest(models.Model):
 
 
 class UserQuest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    quest = models.ForeignKey(Quest, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE)
     begin = models.DateTimeField('Take time to quest')
     end = models.DateTimeField('Time delivery quest', blank=True, null=True)
 
@@ -140,7 +140,7 @@ class UserQuest(models.Model):
 
 
 class Token(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    uid = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=33)
     scope = models.IntegerField(default=1)
     ip = models.GenericIPAddressField()
@@ -155,8 +155,8 @@ class Token(models.Model):
 
 
 class Attempt(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    quest = models.ForeignKey(Quest, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE)
     user_answer = models.CharField(max_length=QUEST_ANSWER_LENGTH)
 
     # Почему мы записываем ответ задания постоянно?
