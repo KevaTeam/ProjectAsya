@@ -26,7 +26,7 @@ def add_action(request):
         category.save()
     except Exception as e:
         print(e)
-        return failure_response(e.args[0])
+        return failure_response(str(e.args[0]) + e.args[1])
 
     return success_response(category.id)
 

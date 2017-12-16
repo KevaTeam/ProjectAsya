@@ -88,7 +88,7 @@ def handle_quest(request, quest):
         return failure_response('Quest with the same name is already exists')
     except Exception as e:
         print(e)
-        return failure_response(e.args[0])
+        return failure_response(str(e.args[0]) + e.args[1])
 
 
 def delete_quest(request):
@@ -341,7 +341,7 @@ def upload_action(request):
         if not os.path.isfile(PATH):
             continue
 
-        file = open(PATH, 'r')
+        file = open(PATH, 'r', encoding="utf-8")
         json_file = file.read()
         l = json.loads(json_file)
 
@@ -360,6 +360,8 @@ def upload_action(request):
         if 'links' in l and type(l['links']) == list and len(l['links']) > 0:
             description = l['description']['RU'] if 'RU' in l['description'] else l['description']
             full_text = description + '</br> <a href="' + l['links'][0].popitem()[1] + '">Вложение</a>'
+
+        file.close()
 
         file = open(path + task + '/solve.md', 'r', encoding='utf-8')
         solution = file.read()
@@ -380,6 +382,10 @@ def upload_action(request):
         r = requests.post('http://localhost/api/method/quest.create', data=payload)
 
         print(r.text)
+        return success_response(r.text)
+
+        file.close()
+
     # archive = request.FILES['archive']
 
     os.remove(tmp_file_path)
