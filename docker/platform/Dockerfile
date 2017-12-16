@@ -10,8 +10,9 @@ RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     mysql-client \
-    libmysqld-dev \
-    pwgen && rm -rf /var/lib/apt/lists/*
+    libmysqlclient-dev
+
+RUN rm -rf /var/lib/apt/lists/*
 
 # nginx config
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
