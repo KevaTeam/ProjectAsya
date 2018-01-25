@@ -5,8 +5,9 @@ command_exists() {
 }
 
 DEFAULT_PORT=80
-echo -e "Let's start to install platform!"
-echo -e "Default port [$DEFAULT_PORT]"
+echo -e "\e[0;33mLet's start to install platform!\e[m"
+echo -e "\e[0;33mFor install we require docker, docker-compose\e[m"
+echo -e "Please input api port. Default port [$DEFAULT_PORT]"
 
 while [ true ]
 do
@@ -17,12 +18,14 @@ do
     fi
 
     if sudo netstat -ntul | grep ":$port " > /dev/null; then
-        echo "Port $port is already in use"
+        echo -e "\e[0;31mPort $port is already in use\e[m"
         echo "Input port: "
     else
         break
     fi
 done
+
+echo -e "\e[0;32mOK. Platform will be launched in $port port\e[m"
 
 if ! command_exists docker; then
     echo -e "\e[31mIt seems that you have not installed docker. Install it.\e[0m"
@@ -39,4 +42,7 @@ echo -e "\e[32mDocker, docker-compose is installed. Run platform.\e[0m"
 
 cd docker/
 
+sed "s/{{PLATFORM_PORT}}/$port/g" docker-compose.yml.sample > docker-compose.yml
 sudo docker-compose up -d --force-recreate
+
+echo -e "\e[0;32mThe platform will be available soon on http://localhost:$port \e[0m"
