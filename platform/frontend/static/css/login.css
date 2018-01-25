@@ -70,6 +70,7 @@ html, body {
     padding: 10px 40px;
     background: #fff;
     text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,.4);
 }
 
 .login-page__footer {
