@@ -1,7 +1,7 @@
 <% for(var i=0; i<user.length; i++) { %>
 <tr>
-    <th scope=row><h3><%= i+1 %></h3></th>
-    <td><h3 class="nickname"><%= user[i].name %></h3></td>
-    <td><h3><%= user[i].score %> points</h3></td>
+    <th scope=row><%= i+1 %></th>
+    <td><%= user[i].name %></td>
+    <td><%= user[i].score %> points</td>
 </tr>
 <% } %>

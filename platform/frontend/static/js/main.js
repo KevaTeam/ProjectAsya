@@ -610,7 +610,7 @@ $(function() {
     });
 
     App.Views.Login = Backbone.View.extend({
-        id: 'container',
+        id: 'login-page-root',
 
         events: {
             'keypress .form-signin input': 'updateOnEnter',
@@ -618,12 +618,19 @@ $(function() {
             'click button#button-signup': 'signupForm',
             'click button#button-login': 'loginForm',
             'click button#button-token': 'toggleToken',
-            'click button.login-bar__scoreboard': 'showRating'
+            'click .login-bar__scoreboard': 'showRating',
+            'click .login-page-scoreboard__close': 'showLoginForm'
         },
 
         initialize: function () {
             this.on('sync', this.setCookie, this);
             App.Views.Main.render(this.render().$el);
+
+            var arr = ['12', '6', '902', '1303', '1301', '305', '907', '7', '602', '903', '1601', '4', '13', '15', '304', '11', '303', '901', '908', '904', '1001', '3', '5', '1400', '1003', '403', '302', '401', '503', '1603', '14', '2', '1', '1604', '1002', '1004', '906', '402', '17', '1100', '16', '1602', '905', '100', '1500', '18', '601', '10', '502', '1005', '1302', '306', '8', '307', '301', '200', '501', '1200', '9', '700'],
+                rand = Math.floor(Math.random() * arr.length);
+
+            console.log(this.$el);
+            this.$el.find('.login-page-background').addClass('login-page-background_' + arr[rand]);
         },
 
         signupForm: function() {
@@ -656,7 +663,11 @@ $(function() {
         },
 
         disableInput: function () {
-            console.log(this.$el.find('input').attr('disabled','disabled'));
+            this.$el.find('input').prop('disabled', false);
+        },
+
+        enableInput: function () {
+            this.$el.find('input').prop('disabled', false);
         },
 
         submitSignup: function() {
@@ -674,16 +685,19 @@ $(function() {
             console.log(params);
             if (params.username == "") {
                 this.message("Не введен логин");
+                this.enableInput();
                 return false;
             }
 
             if (params.password == "") {
                 this.message("Не введен пароль");
+                this.enableInput();
                 return false;
             }
 
             if (params.mail == "") {
                 this.message("Не введен электронный адрес");
+                this.enableInput();
                 return false;
             }
             console.log('SIGNUP');
@@ -728,7 +742,8 @@ $(function() {
 
         showRating: function () {
             var self = this,
-                el = self.$el.find('.scoreboard');
+                el = self.$el.find('.login-page-scoreboard'),
+                $login = $(".login-page");
 
             this.collection = new App.Collections.Users();
 
@@ -744,19 +759,34 @@ $(function() {
             setInterval(function () {
                 self.collection.fetch({ params: { order: 'rating' }});
             }, 5000);
-            $( ".login-bar" ).animate({
+
+            $login.animate({
                 opacity: 0
             }, 500, function() {
-                console.log('ok');
+                $login.hide();
+                el.animate({ opacity: 1 });
                 el.show();
+
                 el.css("position","absolute");
                 el.css("top", Math.max(0, (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop()) + "px");
                 el.css("left", Math.max(0, (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft()) + "px");
 
                 return true;
             });
+        },
 
-            
+        showLoginForm: function () {
+            var self = this,
+                $el = self.$el.find('.login-page-scoreboard'),
+                $login = self.$el.find('.login-page');
+
+            $el.animate({
+                opacity: 0
+            }, 500, function () {
+                $el.hide();
+                $login.animate({ opacity: 1 });
+                $login.show();
+            })
         },
 
         updateOnEnter: function(e) {

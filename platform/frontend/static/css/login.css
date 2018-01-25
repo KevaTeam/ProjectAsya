@@ -1,0 +1,244 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    display: block;
+    height: 100%;
+}
+
+#login-page-root {
+    text-align: center;
+    display: block;
+    height: 100%;
+}
+
+.login-page-body {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.login-page-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: cover;
+}
+
+.login-page-background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,.2);
+}
+
+.login-page {
+    position: relative;
+    margin: 70px 0;
+    display: inline-block;
+    white-space: normal;
+    vertical-align: middle;
+    text-align: left;
+    font-size: 13px;
+}
+
+.login-page__competition-logo {
+    max-width: 150px;
+    margin: 30px 20px;
+}
+
+.login-page-form {
+    width: 350px;
+    padding: 10px 40px;
+    background: #fff;
+    text-align: center;
+}
+
+.login-page__footer {
+    cursor: pointer;
+    background: rgba(0,0,0,.3);
+    position: relative;
+    height: 39px;
+    line-height: 39px;
+    text-align: center;
+    color: #fff;
+}
+
+.login-page-scoreboard-table {
+    margin: 40px 0;
+}
+.form h2 {
+    margin-bottom: 20px;
+}
+
+/* Signup */
+.border {
+    margin: 30px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.login-bar {
+    background: #fff;
+}
+
+    .login-bar .login-bar__scoreboard {
+        margin-top: 20px;
+    }
+
+.login-page-scoreboard {
+    display: none;
+    background: #fff;
+    padding: 0 60px;
+}
+
+.login-page-scoreboard__close::before {
+    content: "\e014";
+    font-family: 'Glyphicons Halflings';
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 40px;
+}
+
+.form-signin .checkbox {
+    font-weight: normal;
+}
+
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-signin .input-group .btn {
+    padding: 11px;
+    margin-top: -10px;
+}
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.form-signin .form-token input, .form-signin .form-team input {
+    margin-bottom: 10px;
+}
+
+/* End signup */
+
+.group {
+  position: relative;
+  margin: 25px 0;
+}
+
+textarea {
+  resize: none;
+}
+
+input,
+textarea {
+  background: none;
+  color: #000;
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #c6c6c6;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+}
+input:focus ~ label, input:valid ~ label,
+textarea:focus ~ label,
+textarea:valid ~ label {
+  top: -14px;
+  font-size: 12px;
+  color: #2196F3;
+}
+input:focus ~ .bar:before,
+textarea:focus ~ .bar:before {
+  width: 100%;
+}
+
+input[type="password"] {
+  letter-spacing: 0.3em;
+}
+
+label {
+  color: #c6c6c6;
+  font-size: 16px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  -webkit-transition: 300ms ease all;
+  transition: 300ms ease all;
+}
+
+.bar {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+.bar:before {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 0px;
+  position: absolute;
+  background: #2196F3;
+  -webkit-transition: 300ms ease all;
+  transition: 300ms ease all;
+  left: 0%;
+}
+
+
+.login-page-bottom {
+    position: absolute;
+    height: 30px;
+    bottom: 0px;
+    color: #fff;
+}

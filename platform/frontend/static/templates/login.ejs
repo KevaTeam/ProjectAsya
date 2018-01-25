@@ -1,87 +1,76 @@
-<style type="text/css">
-	html, body, div {
-		width: 100%;
-		height: 100%;
-	}
-	body {
-		background: url('https://pacdn.500px.org/5046/e1a4004def680446f36ece11d5a6111676649b7a/cover_2048.jpg?12');
-	}
-</style>
-<div class="row">
-	<div class="col-md-4 login-bar">
-		<form class="form-signin" role="form">
-			<div class="form-login form" data-type="login">
-			    <h2 class="form-signin-heading">Вход</h2>
-			    <div class="alert alert-danger message" role="alert" style="display: none;">Произошла ошибка</div>
-			    <div class="form-group">
-			    	<label for="inputEmail" class="sr-only">Логин</label>
-			    	<input type="text" id="inputEmail" class="form-control" placeholder="Логин" value="" autofocus>
-			    </div>
-			    
-			    <div class="form-group">
-			    	<label for="inputPassword" class="sr-only">Пароль</label>
-			    	<input type="password" id="inputPassword" class="form-control" placeholder="Пароль" value="">
-			    </div>
-			    
+<link rel="stylesheet" href="static/css/login.css">
+<link rel="stylesheet" href="static/css/yandex-background.css">
 
-			    <button class="btn btn-success" type="button" id="submit">Войти</button> <br />
-			    <div class="border"></div>
-			    <button class="btn btn-primary" type="button" id="button-signup">У меня нет аккаунта</button>
-			    <button type="button" class="btn btn-default login-bar__scoreboard">
-                  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Таблица результатов
-                </button>
-		    </div>
-		    <div class="form-signup form" style="display: none;" data-type="signup">
-			    <h2 class="form-signin-heading">Регистрация</h2>
-			    <div class="alert alert-danger message" role="alert" style="display: none;">Произошла ошибка</div>
+<div class="login-page-body">
+    <div class="login-page-background"></div>
 
+    <div class="login-page">
+        <div class="login-page-form">
+            <form class="" role="form">
+                <div class="form-login form" data-type="login">
+                    <img class="login-page__competition-logo" src="https://ctfcup.ru/img/partners/sibirctf.png" />
 
-			    <div class="form-group">
-			    	<label for="inputLogin" class="sr-only">Login</label>
-			    	<input type="text" id="inputSignupLogin" class="form-control" placeholder="Введите логин" value="" name="inputSignupLogin" autofocus>
-			    </div>
-			    
-			    <div class="form-group">
-			    	<label for="inputEmail" class="sr-only">Email</label>
-			    	<input type="text" id="inputSignupEmail" class="form-control" placeholder="Введите E-Mail" value="" name="inputSignupEmail" >
-			    </div>
-
-			    <div class="form-group">
-			    	<label for="inputPassword" class="sr-only">Пароль</label>
-			    	<input type="password" id="inputSignupPassword" class="form-control" placeholder="Введите пароль" value="" name="inputSignupPassword">
-			    </div>
-
-                <div class="form-group">
-			    	<div class="input-group form-token">
-                        <input type="password" id="inputSignupToken" class="form-control" placeholder="Введите токен" value="" name="inputSignupToken">
-                        <div class="input-group-btn">
-                            <button id="button-token" class="btn btn-default" type="button">Нет токена</button>
-                        </div>
+                    <div class="alert alert-danger message" role="alert" style="display: none;">Произошла ошибка</div>
+                    <div class="group">
+                        <input type="text" id="inputEmail" required="required" autofocus /><span class="highlight"></span><span class="bar"></span>
+                        <label>Логин</label>
                     </div>
-                    <div class="input-group form-team hidden">
-                        <input type="text" id="inputSignupTeamName" class="form-control" placeholder="Название команды" name="inputSignupTeamName">
-                        <div class="input-group-btn">
-                            <button id="button-token" class="btn btn-default" type="button">А нет, появился</button>
-                        </div>
+                    <div class="group">
+                        <input type="password" id="inputPassword" required="required"/><span class="highlight"></span><span class="bar"></span>
+                        <label>Пароль</label>
                     </div>
+
+                    <button class="btn btn-warning btn-block" type="button" id="submit">Войти</button> <br />
+                    <button class="btn btn-link" type="button" id="button-signup">У меня нет аккаунта</button>
                 </div>
-			    <button class="btn btn-primary" id="submit" type="button">Зарегистрироваться</button> <br />
-			    <div class="border"></div>
-			    <button class="btn btn-success" type="button" id="button-login">Назад ко входу</button>
-		    </div>
-		</form>
-		 
+                <div class="form-signup form" style="display: none;" data-type="signup">
+                    <h2 class="form-signin-heading">Регистрация</h2>
+                    <div class="alert alert-danger message" role="alert" style="display: none;">Произошла ошибка</div>
 
-	</div>
-	<div class="col-md-8 scoreboard">
-		<h1 class="text-center">Таблица результатов</h1>
-		<table class="table table-hover">
-		<tbody class="results">
-		    <tr>
-		        <th scope=row>1</th>
-		        <td>Mark</td> <td>Otto</td>
-		         <td>@mdo</td> </tr>
-		         <tr> <th scope=row>2</th> <td>Jacob</td> <td>Thornton</td> <td>@fat</td> </tr> <tr> <th scope=row>3</th> <td>Larry</td> <td>the Bird</td> <td>@twitter</td> </tr> </tbody> </table>
-	</div>
+                    <div class="group">
+                        <input type="text" id="inputSignupLogin" required="required" autofocus /><span class="highlight"></span><span class="bar"></span>
+                        <label>Логин</label>
+                    </div>
+                    <div class="group">
+                        <input type="text" id="inputSignupEmail" required="required" autofocus /><span class="highlight"></span><span class="bar"></span>
+                        <label>Почтовый адрес</label>
+                    </div>
+                    <div class="group">
+                        <input type="password" id="inputSignupPassword" required="required" autofocus /><span class="highlight"></span><span class="bar"></span>
+                        <label>Пароль</label>
+                    </div>
+
+<!--
+                    <div class="form-group">
+                        <div class="input-group form-token">
+                            <input type="password" id="inputSignupToken" class="form-control" placeholder="Введите токен" value="" name="inputSignupToken">
+                            <div class="input-group-btn">
+                                <button id="button-token" class="btn btn-default" type="button">Нет токена</button>
+                            </div>
+                        </div>
+                        <div class="input-group form-team hidden">
+                            <input type="text" id="inputSignupTeamName" class="form-control" placeholder="Название команды" name="inputSignupTeamName">
+                            <div class="input-group-btn">
+                                <button id="button-token" class="btn btn-default" type="button">А нет, появился</button>
+                            </div>
+                        </div>
+                    </div>-->
+                    <button class="btn btn-warning btn-block" id="submit" type="button">Зарегистрироваться</button> <br />
+                        <button class="btn btn-link" type="button" id="button-login">Назад ко входу</button>
+                </div>
+            </form>
+        </div>
+        <div class="login-page__footer login-bar__scoreboard">Таблица результатов</div>
+    </div>
+    <div class="login-page-bottom">
+        &copy;&#160;2018, KEVA
+    </div>
+    <div class="login-page-scoreboard">
+        <div class="login-page-scoreboard__close"></div>
+        <img class="login-page__competition-logo" src="https://ctfcup.ru/img/partners/sibirctf.png" />
+        <h2 class="text-center">Таблица результатов</h2>
+        <table class="login-page-scoreboard-table table table-hover">
+            <tbody class="results"></tbody>
+        </table>
+    </div>
 </div>
-
