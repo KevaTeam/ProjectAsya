@@ -12,6 +12,13 @@ python3 /app/platform/manage.py migrate
 # Собираем все картинки в одной папке
 echo yes | python3 /app/platform/manage.py collectstatic --noinput
 
+# Устанавливаем необходимые зависимости
+cd /app/platform/frontend/static
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+npm i
+
 # Создаем глобального администратора
 # echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', '$DJANGO_ADMIN_PASSWORD')" | python3 /app/platform/manage.py shell
 
