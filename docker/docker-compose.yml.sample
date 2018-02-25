@@ -26,3 +26,4 @@ services:
             MYSQL_DATABASE: asya
         volumes:
             - ../db:/var/lib/mysql
+            - ./platform/db_config:/etc/mysql/conf.d

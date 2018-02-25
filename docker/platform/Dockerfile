@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     mysql-client \
-    libmysqlclient-dev
+    libmysqlclient-dev \
+    curl
 
 RUN rm -rf /var/lib/apt/lists/*
 
