@@ -24,12 +24,6 @@
 
 ### Запуск платформы ###
     
-Запуск через докер (в одну команду, подходит для production окружения)
+Запуск через докер (в одну команду, подходит для production окружения). 
 
     ./start_docker.sh
-
-Запуск локальной версии (рекомендуется только для тестирования и разработки)
-
-    python3 manage.py makemigrations
-    python3 manage.py migrate
-    python3 manage.py runserver
