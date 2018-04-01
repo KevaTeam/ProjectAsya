@@ -1,3 +1,4 @@
+from django.utils.html import conditional_escape
 from django.db import models
 from datetime import datetime
 from django.conf import settings
@@ -19,6 +20,11 @@ class Team(models.Model):
 
     token = models.CharField(max_length=255)
     score = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.name = conditional_escape(self.name)
+
+        super(Team, self).save(*args, **kwargs)
 
 
 class User(models.Model):
@@ -64,6 +70,8 @@ class User(models.Model):
         if not self.pk:
             self.created_at = datetime.now()
 
+        self.name = conditional_escape(self.name)
+
         super(User, self).save(*args, **kwargs)
 
 
@@ -72,7 +80,8 @@ class QuestCategory(models.Model):
         max_length=30,
         unique=True,
         error_messages={
-            'unique': 'The user with same username is already exists'
+            'unique': 'The category with same name is already exists',
+            'blank': 'Field name cannot be blank.',
         }
     )
 
@@ -85,6 +94,11 @@ class QuestCategory(models.Model):
             'name': self.name
         }
 
+    def save(self, *args, **kwargs):
+        self.name = conditional_escape(self.name)
+
+        super(QuestCategory, self).save(*args, **kwargs)
+        
 
 class Quest(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -119,7 +133,16 @@ class Quest(models.Model):
             'passed': bool(self.passed)
         }
 
+    def save(self, *args, **kwargs):
+        self.name = conditional_escape(self.name)
+        self.author = conditional_escape(self.author)
+        self.short_text = conditional_escape(self.short_text)
+        self.full_text = conditional_escape(self.full_text)
+        self.solution = conditional_escape(self.solution)
+        self.tags = conditional_escape(self.tags)
 
+        super(Quest, self).save(*args, **kwargs)
+        
 class UserQuest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE)
@@ -183,6 +206,8 @@ class Attempt(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.time = datetime.now()
+        
+        self.user_answer = conditional_escape(self.user_answer)
 
         super(Attempt, self).save(*args, **kwargs)
 
