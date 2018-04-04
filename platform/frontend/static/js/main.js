@@ -613,8 +613,10 @@ $(function() {
         id: 'login-page-root',
 
         events: {
-            'keypress .form-signin input': 'updateOnEnter',
+            'keypress .form-login input': 'updateOnEnterLoginForm',
+            'keypress .form-signup input': 'updateOnEnterSignupForm',
             'click button#submit': "submit",
+            // 'keydown .form-login input': ''
             'click button#button-signup': 'signupForm',
             'click button#button-login': 'loginForm',
             'click button#button-token': 'toggleToken',
@@ -789,7 +791,11 @@ $(function() {
             })
         },
 
-        updateOnEnter: function(e) {
+        updateOnEnterLoginForm: function(e) {
+            if (e.keyCode == 13) this.submit(e);
+        },
+
+        updateOnEnterSignupForm: function(e) {
             if (e.keyCode == 13) this.submit(e);
         },
 
