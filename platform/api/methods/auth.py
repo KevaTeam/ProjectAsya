@@ -51,7 +51,7 @@ def signup(request):
         username = get_param_or_fail(request, 'username')
         password = get_param_or_fail(request, 'password')
         mail = request.GET.get('mail', 'undefined' + str(time.time()) + '@example.com')
-        team_name = request.GET.get('team', username+' team')
+        team_name = request.GET.get('team', username)
         token = request.GET.get('token', '')
 
         validate_email(mail)
@@ -106,6 +106,6 @@ def signup(request):
     except IntegrityError as e:
         return failure_response(e.args[0])
     except Exception as e:
-        return failure_response(e.args[0])
+        return failure_response(e.args)
 
     return success_response({'id': user.id})

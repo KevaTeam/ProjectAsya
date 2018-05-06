@@ -2,3 +2,4 @@ uwsgi
 django
 mysqlclient
 requests
+jsonschema

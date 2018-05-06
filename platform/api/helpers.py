@@ -44,3 +44,41 @@ def not_logged_response():
             'code': 1
         }
     })
+
+
+def json_quest_schema():
+    return {
+        'type': 'object',
+        'properties': {
+            'name': { 'type': 'string' },
+            'category': { 'type': 'string' },
+            'description': { 'type': 'string' },
+            'value': { 'type': 'number' },
+            'flag_key': { 'type': 'string' },
+            'author': {
+                'type': ['string', 'object'],
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'name': { 'type': 'string' },
+                        'team': { 'type': 'string' },
+                        'contacts': {
+                            'type': 'array',
+                            'items': { 'type': 'string' }
+                        }
+                    }
+                }
+            },
+            'links': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'name': { 'type': 'string' },
+                        'url': { 'type': 'string' }
+                    }
+                }
+            },
+            'game': { 'type': 'string' }
+        }
+    }

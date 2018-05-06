@@ -18,15 +18,14 @@ def add_action(request):
     if not request.client.is_admin():
         return failure_response("You don't have sufficient permissions")
 
-    name = get_param_or_fail(request, 'name')
-
     try:
+        name = get_param_or_fail(request, 'name')
         category = QuestCategory(name=name)
 
         category.save()
     except Exception as e:
         print(e)
-        return failure_response(str(e.args[0]) + e.args[1])
+        return failure_response(e.args)
 
     return success_response(category.id)
 

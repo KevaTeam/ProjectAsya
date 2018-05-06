@@ -1,8 +1,12 @@
+# -*- coding: UTF-8 -*-
+
 from datetime import datetime, time
 from django.db.models import Sum
 from django.db import IntegrityError
 from api.models import Quest, QuestCategory, UserQuest, Attempt, Config, Team
 from api.helpers import *
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError
 from random import choice
 from string import ascii_uppercase
 
@@ -10,6 +14,7 @@ from zipfile import *
 
 import os
 import json
+import chardet
 import requests
 
 def create_quest(request):
@@ -302,6 +307,13 @@ def get_attempts(request):
     return success_response(array)
 
 
+def set_error(error_text):
+    return {
+        'error': True,
+        'message': error_text
+    }
+
+
 def upload_action(request):
     print(request)
     if request.method != 'POST':
@@ -328,29 +340,55 @@ def upload_action(request):
     path = '/tmp/folder/'
     zip.extractall(path)
 
+    status = {
+        'tasks': {},
+        'categories': {}
+    }
+
     categories = QuestCategory.objects.all()
     cats = {}
     for c in categories:
         cats[c.name.lower()] = c.id
 
     for task in os.listdir(path):
+        status['tasks'][task] = {
+            'error': False,
+            'message': ''
+        }
+
+        s_task = status['tasks'][task]
+
         if os.path.isfile(path + task):
+            s_task = set_error('%s must be a folder' % task)
             continue
 
         PATH = path + task + '/main.json'
         if not os.path.isfile(PATH):
+            s_task = set_error('Not found main.json file')
             continue
 
-        file = open(PATH, 'r', encoding="utf-8")
+        print("Processing %s" % task)
+
+        file = open(PATH, 'r', encoding='cp437')
         json_file = file.read()
+
         l = json.loads(json_file)
+
+        try:
+            validate(l, json_quest_schema())
+        except ValidationError as e:
+            return failure_response(e.message)
+
 
         if l['category'] and l['category'].lower() not in cats:
             category_name = l['category'].lower()
             category = QuestCategory(name=category_name)
             category.save()
 
+            status['categories'][category_name]
             cats[category_name] = category.id
+        else:
+            status['categories'][l['category']] = {}
 
         if type(l['description']) == str:
             full_text = l['description']
@@ -363,26 +401,30 @@ def upload_action(request):
 
         file.close()
 
+        print(type(full_text))
+        full_text = full_text.encode('utf-8')
+        print(full_text)
+
         file = open(path + task + '/solve.md', 'r', encoding='utf-8')
         solution = file.read()
         payload = {
             'id': 0,
-            'title': l['name'],
+            'title': l['name'].encode('utf-8'),
             'section': cats[l['category'].lower()],
             'score': l['value'],
-            'answer': l['flag_key'],
-            'author': l['author']['nick'] if 'nick' in l['author'] else 'undefined',
+            'answer': l['flag_key'].encode('utf-8'),
+            'author': l['author']['nick'].encode('utf-8') if 'nick' in l['author'] else 'undefined',
             'short_text': full_text,
             'full_text': full_text,
-            'tags': l['category'],
-            'solution': solution,
+            'tags': l['category'].encode('utf-8'),
+            'solution': solution.encode('utf-8'),
             'access_token': request.GET.get('access_token', None)
         }
-        # print(payload)
+
+        print(payload)
         r = requests.post('http://localhost/api/method/quest.create', data=payload)
 
         print(r.text)
-        return success_response(r.text)
 
         file.close()
 
